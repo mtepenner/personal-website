@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matthew Penner | Software Engineer</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #0056b3;
+            --secondary-color: #e2e8f0;
+            --accent-color: #007bff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        nav {
+            background: #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 1rem;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* About & Education */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Skills */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .portfolio-card {
+            background: white;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .portfolio-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .portfolio-card .tech-stack {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: white;
+            background: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .github-link:hover {
+            background: var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #333;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Matthew Penner</h1>
+        <p>Software Engineer</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="about-grid">
+                <div class="card">
+                    <h3>Profile</h3>
+                    <p>I am a passionate software engineer with a strong foundation in programming, algorithms, and systems development. I enjoy tackling complex technical challenges, whether that involves low-level systems programming, full-stack web development, or exploring AI-forward engineering organizations.</p>
+                </div>
+                <div class="card">
+                    <h3>Education</h3>
+                    <p><strong>Portland State University</strong></p>
+                    <p>Bachelor of Science, Computer Science</p>
+                    <p><em>University Honors College</em></p>
+                    <p>Senior Thesis: Developed a custom web application featuring 360-degree photography and interactive mapping for the Multnomah Athletic Club.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Technical Skills</h2>
+            <div class="card">
+                <div class="skills-container">
+                    <span class="skill-tag">C / C++</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Rust</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">JavaScript / TypeScript</span>
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">SQL & MongoDB</span>
+                    <span class="skill-tag">POSIX Threads / Multi-threading</span>
+                    <span class="skill-tag">Data Structures & Algorithms</span>
+                    <span class="skill-tag">Network Programming (TCP/IP)</span>
+                    <span class="skill-tag">Linux / GDB</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio">
+            <h2>Undergraduate Portfolio Highlights</h2>
+            <p style="margin-bottom: 1.5rem;">A selection of projects from my GitHub repository demonstrating systems programming, data structures, and application development.</p>
+            
+            <div class="portfolio-grid">
+                
+                <div class="portfolio-card">
+                    <h3>Air Traffic Control Simulator</h3>
+                    <div class="tech-stack">Rust</div>
+                    <p>A simulation engine built to model air traffic control scenarios, demonstrating strong ownership, memory safety, and systems-level programming paradigms using Rust.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Multi-threaded Client-Server App</h3>
+                    <div class="tech-stack">C, POSIX API, TCP/IP</div>
+                    <p>Developed concurrent network applications utilizing POSIX threads, mutex locks, and Linux system calls to handle multiple client connections simultaneously and securely.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Advanced Data Structures Library</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Implemented complex data structures from scratch including 2-3 Trees, Binary Search Trees, Hash Tables, and Graph networks, focusing on memory management and algorithmic efficiency.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Interpreters & Programming Languages</h3>
+                    <div class="tech-stack">Python, C</div>
+                    <p>Built custom language interpreters and parsers (ToyLang, ImpLang) focusing on semantic evaluation, currying, and abstract syntax trees.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                 <div class="portfolio-card">
+                    <h3>Rule 110 Cellular Automaton</h3>
+                    <div class="tech-stack">Rust</div>
+                    <p>Programmed an implementation of the Rule 110 cellular automaton, highlighting functional programming concepts and efficient state computation.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <div class="card" style="text-align: center;">
+                <p>Ready to connect? Feel free to reach out via email or check out my full code history on GitHub.</p>
+                <br>
+                <p><strong>Email:</strong> <a href="mailto:mtepenner@gmail.com" style="color: var(--primary-color);">mtepenner@gmail.com</a></p>
+                <p><strong>Location:</strong> Beaverton / Portland Metro Area, OR</p>
+                <br>
+                <a href="https://github.com/mtepenner" target="_blank" class="github-link" style="background: #333;">GitHub Profile</a>
+                <a href="https://www.linkedin.com/in/matthew-penner-3954321700" target="_blank" class="github-link" style="background: #0077b5; margin-left: 10px;">LinkedIn</a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
