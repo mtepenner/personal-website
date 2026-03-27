@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Daily Herald - Digital Edition</title>
+    <style>
+        /* --- STYLES FROM ORIGINAL TEMPLATE --- */
+        body { background-color: #f4f1ea; font-family: 'Times New Roman', serif; color: #1a1a1a; margin: 0; padding: 20px; }
+        .paper-container { max-width: 1100px; margin: 0 auto; border: 1px solid #d1d1d1; padding: 25px; background-color: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        header { text-align: center; border-bottom: 5px double #000; margin-bottom: 20px; }
+        header h1 { font-size: 5.5rem; text-transform: uppercase; margin: 10px 0; font-family: 'Georgia', serif; letter-spacing: -2px; }
+        .metadata { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.85rem; border-top: 2px solid #000; padding: 5px 0; text-transform: uppercase; }
+        .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; }
+        .section-label { background: #000; color: #fff; padding: 2px 8px; text-transform: uppercase; font-size: 0.75rem; display: inline-block; margin-bottom: 10px; }
+        h2 { font-size: 2.8rem; line-height: 0.95; margin: 10px 0; }
+        h3 { font-size: 1.5rem; margin-top: 5px; }
+        .byline { font-style: italic; margin-bottom: 15px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .hero-img { width: 100%; height: 450px; object-fit: cover; filter: grayscale(100%) contrast(1.2); margin-bottom: 20px; border: 1px solid #000; transition: 0.3s; }
+        .hero-img.loading { filter: blur(5px) grayscale(100%); background: #eee; }
+        p { text-align: justify; line-height: 1.4; font-size: 1rem; margin-bottom: 15px; }
+        .sidebar { border-left: 1px solid #ddd; padding-left: 20px; }
+        .market-ticker { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; font-family: monospace; font-size: 0.85rem; display: flex; justify-content: space-around; margin-bottom: 20px; }
+        
+        /* Configuration UI */
+        #config-panel { background: #333; color: white; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: sans-serif; }
+        #config-panel input { margin-right: 10px; padding: 5px; }
+        .hidden { display: none !important; }
+        button { cursor: pointer; padding: 5px 15px; background: #eee; border: 1px solid #ccc; font-weight: bold; }
+        button:hover { background: #ddd; }
+    </style>
+</head>
+<body>
+
+    <div id="config-panel">
+        <strong>Editor's Desk:</strong> Enter your API keys to begin publishing.
+        <br><br>
+        <input type="password" id="openai_key" placeholder="OpenAI Key">
+        <input type="password" id="news_api_key" placeholder="NewsAPI Key">
+        <input type="password" id="pexels_key" placeholder="Pexels Key">
+        <button onclick="startPublishing()">Publish Today's Edition</button>
+    </div>
+
+    <div class="paper-container">
+        <header>
+            <div class="metadata">
+                <span>Vol. CXIV ... No. 82</span>
+                <span id="current-date">Fetching date...</span>
+                <span>Hillsboro Edition</span>
+            </div>
+            <h1>The Daily Herald</h1>
+        </header>
+
+        <div class="market-ticker">
+            <span>S&P 500: 6,545.21 <span style="color:red">▼</span></span>
+            <span>DOW: 45,771.64 <span style="color:red">▼</span></span>
+            <span>NASDAQ: 24,098.62 <span style="color:red">▼</span></span>
+            <span>BRENT CRUDE: $109.31 <span style="color:green">▲</span></span>
+        </div>
+
+        <div class="main-grid">
+            <main>
+                <section id="politics">
+                    <span class="section-label">World & Politics</span>
+                    <h2 id="pol-headline">Awaiting Dispatch...</h2>
+                    <span class="byline">By Viola Davis, Chief Correspondent</span>
+                    <img src="https://via.placeholder.com/800x450?text=Press+Start" id="pol-image" class="hero-img" alt="Headline Image">
+                    <p id="pol-content">The editorial team is currently gathering intelligence from global wires. Please stand by for the latest developments from our bureaus.</p>
+                </section>
+            </main>
+
+            <aside class="sidebar">
+                <section id="sports">
+                    <span class="section-label">Sports</span>
+                    <h3 id="sports-headline">Final Scores Pending</h3>
+                    <p id="sports-content">Athletic reports are being compiled by our sports desk.</p>
+                </section>
+                <hr>
+                <section id="culture">
+                    <span class="section-label">Culture</span>
+                    <h3 id="culture-headline">The Arts & Society</h3>
+                    <p id="culture-content">Cultural critiques and entertainment news will follow shortly.</p>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Set Today's Date
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        async function startPublishing() {
+            const keys = {
+                openai: document.getElementById('openai_key').value,
+                news: document.getElementById('news_api_key').value,
+                pexels: document.getElementById('pexels_key').value
+            };
+
+            if (!keys.openai || !keys.news || !keys.pexels) {
+                alert("All API keys are required.");
+                return;
+            }
+
+            document.getElementById('config-panel').classList.add('hidden');
+            
+            // Define sections
+            const sections = [
+                { id: 'pol', category: 'politics', label: 'World & Politics' },
+                { id: 'sports', category: 'sports', label: 'Sports' },
+                { id: 'culture', category: 'entertainment', label: 'Culture' }
+            ];
+
+            for (const section of sections) {
+                await processSection(section, keys);
+            }
+        }
+
+        async function processSection(section, keys) {
+            console.log(`Processing ${section.category}...`);
+            
+            // 1. Fetch News
+            let newsData = { title: "Wires Down", description: "Communication limited." };
+            try {
+                const res = await fetch(`https://newsapi.org/v2/top-headlines?category=${section.category}&language=en&apiKey=${keys.news}`);
+                const data = await res.json();
+                if (data.articles && data.articles.length > 0) {
+                    newsData = data.articles[0];
+                }
+            } catch (e) { console.error("News fetch failed", e); }
+
+            // 2. Fetch Image (Pexels)
+            let imageUrl = "https://via.placeholder.com/800x450?text=The+Daily+Herald";
+            try {
+                const imgKeyword = newsData.title.split(' ').slice(-1)[0];
+                const res = await fetch(`https://api.pexels.com/v1/search?query=${imgKeyword}&per_page=1`, {
+                    headers: { Authorization: keys.pexels }
+                });
+                const data = await res.json();
+                if (data.photos && data.photos.length > 0) {
+                    imageUrl = data.photos[0].src.large;
+                }
+            } catch (e) { console.error("Pexels fetch failed", e); }
+
+            // 3. AI Rewrite (OpenAI)
+            let aiContent = "Our reporters are currently on the scene. Full story to follow as details emerge.";
+            try {
+                const res = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${keys.openai}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o",
+                        messages: [
+                            { role: "system", content: "You are a Pulitzer Prize-winning editor. Use the persona of Viola Davis." },
+                            { role: "user", content: `Write a formal, high-prestige 120-word news story for the ${section.label} section based on this: ${newsData.title}. Context: ${newsData.description}.` }
+                        ]
+                    })
+                });
+                const data = await res.json();
+                aiContent = data.choices[0].message.content;
+            } catch (e) { console.error("OpenAI fetch failed", e); }
+
+            // 4. Update UI
+            document.getElementById(`${section.id}-headline`).innerText = newsData.title;
+            document.getElementById(`${section.id}-content`).innerText = aiContent;
+            
+            const imgEl = document.getElementById(`${section.id}-image`);
+            if (imgEl) {
+                imgEl.src = imageUrl;
+            }
+        }
+    </script>
+</body>
+</html>
