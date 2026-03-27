@@ -1,4 +1,4 @@
-# 🕹️ Postgrad Webgames Collection
+# 🕹️ Webgames Collection
 
 A curated laboratory of browser-based arcade experiences. This repository serves as a technical showcase for high-performance rendering, procedural audio, and nostalgic game design across different web technologies.
 
