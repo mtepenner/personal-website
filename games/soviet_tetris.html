@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soviet Tetris ☭</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
+        body {
+            background-color: #111;
+            color: #FFD700;
+            font-family: 'Russo One', sans-serif; /* Blocky, Cyrillic-feeling font */
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: radial-gradient(circle at center, #330000 0%, #000000 100%);
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 8px solid #cc0000;
+            background-color: #222;
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(204, 0, 0, 0.5), inset 0 0 10px #000;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .game-container {
+                flex-direction: row;
+                align-items: flex-start;
+                padding: 20px;
+                gap: 20px;
+            }
+        }
+
+        canvas {
+            background-color: #0a0a0a;
+            border: 4px solid #cc0000;
+            image-rendering: pixelated;
+            box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.1);
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .panel {
+                margin-top: 0;
+            }
+        }
+
+        .info-box {
+            background-color: #1a1a1a;
+            border: 2px solid #FFD700;
+            padding: 10px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .info-box span {
+            display: block;
+            color: #cc0000;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        .info-box div {
+            font-size: 1.5rem;
+        }
+
+        .title {
+            color: #cc0000;
+            text-shadow: 2px 2px 0px #FFD700;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        button {
+            background-color: #cc0000;
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #FFD700;
+            color: #cc0000;
+            border-color: #cc0000;
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .mobile-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .mobile-controls button {
+            padding: 15px 0;
+            font-size: 1.2rem;
+            background-color: #333;
+            border-color: #555;
+            color: #fff;
+        }
+
+        .mobile-controls button:active {
+            background-color: #cc0000;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-controls {
+                display: none;
+            }
+        }
+
+        #game-over {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            display: none;
+        }
+
+        .propaganda-text {
+            color: #cc0000;
+            font-size: 3rem;
+            text-shadow: 2px 2px #FFD700;
+            text-align: center;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        /* Themed block colors */
+        .color-I { background-color: #c0392b; } /* Deep Red */
+        .color-J { background-color: #d35400; } /* Burnt Orange */
+        .color-L { background-color: #f39c12; } /* Gold */
+        .color-O { background-color: #f1c40f; } /* Yellow */
+        .color-S { background-color: #7f8c8d; } /* Grey */
+        .color-T { background-color: #8e44ad; } /* Purple */
+        .color-Z { background-color: #2c3e50; } /* Navy */
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        
+        <!-- Left/Top: Game Canvas -->
+        <div style="position: relative;">
+            <canvas id="tetris" width="300" height="600"></canvas>
+            <div id="game-over">
+                <div class="propaganda-text">
+                    ★ GAME OVER ★<br>
+                    <span style="font-size: 1.5rem; color: #fff; text-shadow: none;">THE MOTHERLAND EXPECTS BETTER</span>
+                </div>
+                <button onclick="resetGame()" style="font-size: 1.5rem; padding: 15px 30px;">RESTART, COMRADE</button>
+            </div>
+        </div>
+
+        <!-- Right/Bottom: UI Panel -->
+        <div class="panel">
+            <div class="title">☭ ТЕТРИС ☭</div>
+
+            <div class="info-box">
+                <span>NEXT PIECE</span>
+                <canvas id="preview" width="120" height="120" style="margin: 5px auto; display: block; background: #000; border: 2px solid #555;"></canvas>
+            </div>
+
+            <div class="info-box">
+                <span>SCORE</span>
+                <div id="score">0</div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div class="info-box" style="flex: 1;">
+                    <span>LEVEL</span>
+                    <div id="level">1</div>
+                </div>
+                <div class="info-box" style="flex: 1;">
+                    <span>LINES</span>
+                    <div id="lines">0</div>
+                </div>
+            </div>
+
+            <button id="start-btn" onclick="togglePause()">START / PAUSE</button>
+            
+            <button id="music-btn" onclick="toggleMusic()" style="font-size: 0.8rem; background-color: #333;">
+                🎵 PLAY MUSIC (ORIGINAL TEMPO)
+            </button>
+            <div style="text-align: center; font-size: 0.7rem; color: #888;">
+                Use Arrow Keys. Up to Rotate.
+            </div>
+
+            <!-- Mobile Controls -->
+            <div class="mobile-controls">
+                <button onclick="move(-1)">◀</button>
+                <button onclick="rotate(1)">↻</button>
+                <button onclick="move(1)">▶</button>
+                <button onclick="drop()" style="grid-column: span 3;">▼ DROP</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- CANVAS SETUP ---
+    const canvas = document.getElementById('tetris');
+    const context = canvas.getContext('2d');
+    const previewCanvas = document.getElementById('preview');
+    const previewContext = previewCanvas.getContext('2d');
+    
+    // Scale everything up by 30
+    context.scale(30, 30);
+    previewContext.scale(30, 30);
+
+    // --- TETRIS LOGIC ---
+    
+    function arenaSweep() {
+        let rowCount = 1;
+        let linesClearedThisTurn = 0;
+        outer: for (let y = arena.length - 1; y >= 0; --y) {
+            for (let x = 0; x < arena[y].length; ++x) {
+                if (arena[y][x] === 0) {
+                    continue outer;
+                }
+            }
+            const row = arena.splice(y, 1)[0].fill(0);
+            arena.unshift(row);
+            ++y;
+            
+            linesClearedThisTurn++;
+            player.lines++;
+            player.score += rowCount * 100 * player.level;
+            rowCount *= 2;
+        }
+
+        if (linesClearedThisTurn > 0) {
+            player.level = Math.floor(player.lines / 10) + 1;
+            dropInterval = Math.max(100, 1000 - (player.level - 1) * 100);
+            updateScore();
+        }
+    }
+
+    function collide(arena, player) {
+        const m = player.matrix;
+        const o = player.pos;
+        for (let y = 0; y < m.length; ++y) {
+            for (let x = 0; x < m[y].length; ++x) {
+                if (m[y][x] !== 0 &&
+                   (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function createMatrix(w, h) {
+        const matrix = [];
+        while (h--) {
+            matrix.push(new Array(w).fill(0));
+        }
+        return matrix;
+    }
+
+    function createPiece(type) {
+        if (type === 'I') return [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]];
+        if (type === 'L') return [[0, 2, 0], [0, 2, 0], [0, 2, 2]];
+        if (type === 'J') return [[0, 3, 0], [0, 3, 0], [3, 3, 0]];
+        if (type === 'O') return [[4, 4], [4, 4]];
+        if (type === 'Z') return [[5, 5, 0], [0, 5, 5], [0, 0, 0]];
+        if (type === 'S') return [[0, 6, 6], [6, 6, 0], [0, 0, 0]];
+        if (type === 'T') return [[0, 7, 0], [7, 7, 7], [0, 0, 0]];
+    }
+
+    // Constructivist color palette
+    const colors = [
+        null,
+        '#c0392b', // 1: Red (I)
+        '#d35400', // 2: Orange (L)
+        '#f39c12', // 3: Gold (J)
+        '#f1c40f', // 4: Yellow (O)
+        '#7f8c8d', // 5: Grey (Z)
+        '#bdc3c7', // 6: Light Grey (S)
+        '#8e44ad'  // 7: Purple (T)
+    ];
+
+    function drawMatrix(matrix, offset, ctx) {
+        matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    ctx.fillStyle = colors[value];
+                    ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
+                    
+                    // Add bevel for blocky look
+                    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                    ctx.fillRect(x + offset.x, y + offset.y, 1, 0.1);
+                    ctx.fillRect(x + offset.x, y + offset.y, 0.1, 1);
+                    
+                    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                    ctx.fillRect(x + offset.x, y + offset.y + 0.9, 1, 0.1);
+                    ctx.fillRect(x + offset.x + 0.9, y + offset.y, 0.1, 1);
+                }
+            });
+        });
+    }
+
+    function draw() {
+        // Draw grid background
+        context.fillStyle = '#111';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Subtle grid lines
+        context.strokeStyle = '#222';
+        context.lineWidth = 0.05;
+        for(let i=0; i<10; i++) {
+            context.beginPath(); context.moveTo(i, 0); context.lineTo(i, 20); context.stroke();
+        }
+        for(let i=0; i<20; i++) {
+            context.beginPath(); context.moveTo(0, i); context.lineTo(10, i); context.stroke();
+        }
+
+        drawMatrix(arena, {x: 0, y: 0}, context);
+        drawMatrix(player.matrix, player.pos, context);
+        
+        // Draw Preview
+        previewContext.fillStyle = '#000';
+        previewContext.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+        
+        if (nextPiece) {
+            // Center the piece in the 4x4 preview box
+            const offset = {
+                x: nextPiece[0].length === 2 ? 1 : (nextPiece[0].length === 4 ? 0 : 0.5),
+                y: nextPiece.length === 2 ? 1 : (nextPiece.length === 4 ? 0 : 0.5)
+            };
+            drawMatrix(nextPiece, offset, previewContext);
+        }
+    }
+
+    function merge(arena, player) {
+        player.matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    arena[y + player.pos.y][x + player.pos.x] = value;
+                }
+            });
+        });
+    }
+
+    function drop() {
+        if(isPaused || isGameOver) return;
+        player.pos.y++;
+        if (collide(arena, player)) {
+            player.pos.y--;
+            merge(arena, player);
+            playerReset();
+            arenaSweep();
+            updateScore();
+        }
+        dropCounter = 0;
+    }
+
+    function move(dir) {
+        if(isPaused || isGameOver) return;
+        player.pos.x += dir;
+        if (collide(arena, player)) {
+            player.pos.x -= dir;
+        }
+    }
+
+    function playerReset() {
+        const pieces = 'TJLOSZI';
+        if (!nextPiece) {
+            nextPiece = createPiece(pieces[pieces.length * Math.random() | 0]);
+        }
+        player.matrix = nextPiece;
+        nextPiece = createPiece(pieces[pieces.length * Math.random() | 0]);
+        
+        player.pos.y = 0;
+        player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+        
+        if (collide(arena, player)) {
+            gameOver();
+        }
+    }
+
+    function rotate(dir) {
+        if(isPaused || isGameOver) return;
+        const pos = player.pos.x;
+        let offset = 1;
+        rotateMatrix(player.matrix, dir);
+        while (collide(arena, player)) {
+            player.pos.x += offset;
+            offset = -(offset + (offset > 0 ? 1 : -1));
+            if (offset > player.matrix[0].length) {
+                rotateMatrix(player.matrix, -dir);
+                player.pos.x = pos;
+                return;
+            }
+        }
+    }
+
+    function rotateMatrix(matrix, dir) {
+        for (let y = 0; y < matrix.length; ++y) {
+            for (let x = 0; x < y; ++x) {
+                [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+            }
+        }
+        if (dir > 0) {
+            matrix.forEach(row => row.reverse());
+        } else {
+            matrix.reverse();
+        }
+    }
+
+    let dropCounter = 0;
+    let dropInterval = 1000;
+    let lastTime = 0;
+    let isPaused = true;
+    let isGameOver = false;
+
+    function update(time = 0) {
+        if (isPaused || isGameOver) {
+            lastTime = time;
+            requestAnimationFrame(update);
+            return;
+        }
+
+        const deltaTime = time - lastTime;
+        lastTime = time;
+        dropCounter += deltaTime;
+        
+        if (dropCounter > dropInterval) {
+            drop();
+        }
+
+        draw();
+        requestAnimationFrame(update);
+    }
+
+    function updateScore() {
+        document.getElementById('score').innerText = player.score;
+        document.getElementById('level').innerText = player.level;
+        document.getElementById('lines').innerText = player.lines;
+    }
+
+    function togglePause() {
+        if (isGameOver) {
+            resetGame();
+            return;
+        }
+        isPaused = !isPaused;
+        document.getElementById('start-btn').innerText = isPaused ? "RESUME" : "PAUSE";
+    }
+
+    function gameOver() {
+        isGameOver = true;
+        document.getElementById('game-over').style.display = 'flex';
+        arena.forEach(row => row.fill(0));
+    }
+
+    function resetGame() {
+        arena.forEach(row => row.fill(0));
+        player.score = 0;
+        player.lines = 0;
+        player.level = 1;
+        dropInterval = 1000;
+        isGameOver = false;
+        isPaused = false;
+        document.getElementById('game-over').style.display = 'none';
+        document.getElementById('start-btn').innerText = "PAUSE";
+        updateScore();
+        nextPiece = null;
+        playerReset();
+    }
+
+    const arena = createMatrix(10, 20);
+    let nextPiece = null;
+
+    const player = {
+        pos: {x: 0, y: 0},
+        matrix: null,
+        score: 0,
+        level: 1,
+        lines: 0
+    };
+
+    document.addEventListener('keydown', event => {
+        if(isGameOver) return;
+        if (event.keyCode === 37) { // Left arrow
+            move(-1);
+        } else if (event.keyCode === 39) { // Right arrow
+            move(1);
+        } else if (event.keyCode === 40) { // Down arrow
+            drop();
+        } else if (event.keyCode === 38) { // Up arrow
+            rotate(1);
+        } else if (event.keyCode === 32) { // Space (Hard drop)
+            while(!collide(arena, player)) {
+                player.pos.y++;
+            }
+            player.pos.y--;
+            merge(arena, player);
+            playerReset();
+            arenaSweep();
+            updateScore();
+            dropCounter = 0;
+        }
+    });
+
+    // --- MUSIC SYNTHESIZER (ORIGINAL TEMPO KOROBEINIKI) ---
+    // Specifically coded to be moderate tempo (not sped up) per user preference.
+    let audioCtx = null;
+    let isPlayingMusic = false;
+    let musicInterval = null;
+
+    // Frequencies for Korobeiniki (Tetris Theme A)
+    const notes = {
+        'E5': 659.25, 'B4': 493.88, 'C5': 523.25, 'D5': 587.33,
+        'A4': 440.00, 'G#4': 415.30, 'P': 0 // P is pause/rest
+    };
+
+    // Note sequence and duration (1 = quarter note, 0.5 = eighth note)
+    const melody = [
+        ['E5', 1], ['B4', 0.5], ['C5', 0.5], ['D5', 1], ['C5', 0.5], ['B4', 0.5],
+        ['A4', 1], ['A4', 0.5], ['C5', 0.5], ['E5', 1], ['D5', 0.5], ['C5', 0.5],
+        ['B4', 1.5], ['C5', 0.5], ['D5', 1], ['E5', 1],
+        ['C5', 1], ['A4', 1], ['A4', 2],
+        
+        ['P', 0.5], ['D5', 1], ['F5', 0.5], ['A5', 1], ['G5', 0.5], ['F5', 0.5],
+        ['E5', 1.5], ['C5', 0.5], ['E5', 1], ['D5', 0.5], ['C5', 0.5],
+        ['B4', 1], ['B4', 0.5], ['C5', 0.5], ['D5', 1], ['E5', 1],
+        ['C5', 1], ['A4', 1], ['A4', 2]
+    ];
+
+    // Added to support the F5, A5, G5 notes in the second part of the melody
+    notes['F5'] = 698.46;
+    notes['A5'] = 880.00;
+    notes['G5'] = 783.99;
+
+    let currentNote = 0;
+    const bpm = 110; // ORIGINAL MODERATE TEMPO - NOT SPED UP
+    const beatDuration = 60000 / bpm; 
+
+    function playTone(freq, durationMs) {
+        if (!audioCtx || freq === 0) return;
+        
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        osc.type = 'square'; // Chiptune sound
+        osc.frequency.value = freq;
+        
+        // Envelope to avoid clicking and make it sound 8-bit
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (durationMs / 1000) - 0.05);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + (durationMs / 1000));
+    }
+
+    function playNextNote() {
+        if (!isPlayingMusic) return;
+        
+        const [noteName, durationInBeats] = melody[currentNote];
+        const durationMs = durationInBeats * beatDuration;
+        
+        playTone(notes[noteName], durationMs);
+        
+        currentNote = (currentNote + 1) % melody.length;
+        musicInterval = setTimeout(playNextNote, durationMs);
+    }
+
+    function toggleMusic() {
+        const btn = document.getElementById('music-btn');
+        if (isPlayingMusic) {
+            isPlayingMusic = false;
+            clearTimeout(musicInterval);
+            btn.innerText = "🎵 PLAY MUSIC (ORIGINAL TEMPO)";
+            btn.style.backgroundColor = "#333";
+            btn.style.color = "#FFD700";
+        } else {
+            // Initialize AudioContext on first user interaction
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isPlayingMusic = true;
+            currentNote = 0;
+            playNextNote();
+            btn.innerText = "🔇 STOP MUSIC";
+            btn.style.backgroundColor = "#FFD700";
+            btn.style.color = "#cc0000";
+        }
+    }
+
+    // Initialize the game state
+    playerReset();
+    updateScore();
+    draw();
+    update();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matthew Penner | Web Games</title>
+    <style>
+        :root {
+            /* Kept your core colors, but adapted for a dark "gaming" theme */
+            --bg-color: #121212;
+            --text-color: #f4f7f6;
+            --card-bg: #1e1e24;
+            --primary-color: #0056b3;
+            --accent-color: #007bff;
+            --hover-color: #33333e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Simplified Nav to get back to the main site */
+        nav {
+            background: #000;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-brand {
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Game Dashboard Grid */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,123,255,0.2);
+            background: var(--hover-color);
+        }
+
+        /* Placeholder for game thumbnails */
+        .game-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: #2a2a35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 3rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .game-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-stack {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .game-info p {
+            font-size: 0.95rem;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            padding: 0.6rem;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .btn-play {
+            background: var(--accent-color);
+        }
+
+        .btn-play:hover {
+            background: #0056b3;
+        }
+
+        .btn-code {
+            background: #444;
+        }
+
+        .btn-code:hover {
+            background: #666;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #333;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="nav-brand">&larr; Back to Main Portfolio</a>
+        <a href="https://github.com/mtepenner" target="_blank">GitHub</a>
+    </nav>
+
+    <header>
+        <h1>Postgrad Webgames Collection</h1>
+        <p>A curated laboratory of browser-based arcade experiences.</p>
+    </header>
+
+    <div class="container">
+        <div class="game-grid">
+            
+            <div class="game-card">
+                <div class="game-thumbnail">✈️</div>
+                <div class="game-info">
+                    <h3>Sector 7</h3>
+                    <div class="tech-stack">2D Canvas • Web Audio</div>
+                    <p>Retro ATC radar simulator. Manage lateral and vertical separation logic while guiding aircraft to safely land.</p>
+                    <div class="button-group">
+                        <a href="atc_sector_7.html" target="_blank" class="btn btn-play">Play Now</a>
+                        <a href="blob/main/atc_sector_7.html" target="_blank" class="btn btn-code">View Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-thumbnail">🚀</div>
+                <div class="game-info">
+                    <h3>DEFCON: Red Shield</h3>
+                    <div class="tech-stack">React • State Management</div>
+                    <p>Strategic ICBM defense simulator featuring chain-reaction physics and wave escalation mechanics.</p>
+                    <div class="button-group">
+                        <a href="#" target="_blank" class="btn btn-play">Play Now</a>
+                        <a href="https://github.com/mtepenner/webgames/blob/main/defcon_red_shield.js" target="_blank" class="btn btn-code">View Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-thumbnail">🧟</div>
+                <div class="game-info">
+                    <h3>Portland Fent Fight</h3>
+                    <div class="tech-stack">Three.js • WebGL</div>
+                    <p>A 3D urban survival arena featuring procedural textures, AABB collision detection, and weapon inventory systems.</p>
+                    <div class="button-group">
+                        <a href="web_arena.html" target="_blank" class="btn btn-play">Play Now</a>
+                        <a href="https://github.com/mtepenner/webgames/blob/main/web_arena.html" target="_blank" class="btn btn-code">View Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-thumbnail">🏛️</div>
+                <div class="game-info">
+                    <h3>Nation Simulator: Epoch One</h3>
+                    <div class="tech-stack">HTML5 • JavaScript</div>
+                    <p>A text-and-stat-based civilization management game. Balance the treasury, resources, and public approval across epochs.</p>
+                    <div class="button-group">
+                        <a href="nation_simulator.html" target="_blank" class="btn btn-play">Play Now</a>
+                        <a href="https://github.com/mtepenner/webgames/blob/main/nation_simulator.html" target="_blank" class="btn btn-code">View Code</a>
+                    </div>
+                </div>
+            </div>
+
+             <div class="game-card">
+                <div class="game-thumbnail">🧱</div>
+                <div class="game-info">
+                    <h3>Soviet Tetris</h3>
+                    <div class="tech-stack">HTML5 Canvas • Synth Audio</div>
+                    <p>A block-stacking puzzle game built with a constructivist aesthetic and a custom procedural audio synthesizer.</p>
+                    <div class="button-group">
+                        <a href="soviet_tetris.html" target="_blank" class="btn btn-play">Play Now</a>
+                        <a href="https://github.com/mtepenner/webgames/blob/main/soviet_tetris.html" target="_blank" class="btn btn-code">View Code</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
