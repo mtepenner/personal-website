@@ -12,7 +12,6 @@ A comprehensive collection of academic and personal projects developed during my
 2. [Installation & Setup](#-installation--setup)
 3. [Key Features](#-key-features)
 4. [Thesis Work](#-thesis-work)
-5. [License](#-license)
 
 ## 🚀 Project Highlights
 
