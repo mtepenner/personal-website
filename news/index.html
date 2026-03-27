@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Daily Herald - Digital Edition</title>
+    <title>The Daily Herald</title>
     <style>
-        /* --- STYLES FROM ORIGINAL TEMPLATE --- */
+        /* --- VINTAGE STYLES --- */
         body { background-color: #f4f1ea; font-family: 'Times New Roman', serif; color: #1a1a1a; margin: 0; padding: 20px; }
         .paper-container { max-width: 1100px; margin: 0 auto; border: 1px solid #d1d1d1; padding: 25px; background-color: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
         header { text-align: center; border-bottom: 5px double #000; margin-bottom: 20px; }
@@ -14,164 +14,115 @@
         .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; }
         .section-label { background: #000; color: #fff; padding: 2px 8px; text-transform: uppercase; font-size: 0.75rem; display: inline-block; margin-bottom: 10px; }
         h2 { font-size: 2.8rem; line-height: 0.95; margin: 10px 0; }
-        h3 { font-size: 1.5rem; margin-top: 5px; }
-        .byline { font-style: italic; margin-bottom: 15px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .hero-img { width: 100%; height: 450px; object-fit: cover; filter: grayscale(100%) contrast(1.2); margin-bottom: 20px; border: 1px solid #000; transition: 0.3s; }
-        .hero-img.loading { filter: blur(5px) grayscale(100%); background: #eee; }
-        p { text-align: justify; line-height: 1.4; font-size: 1rem; margin-bottom: 15px; }
+        .hero-img { width: 100%; height: 450px; object-fit: cover; filter: grayscale(100%) contrast(1.2); margin-bottom: 20px; border: 1px solid #000; }
         .sidebar { border-left: 1px solid #ddd; padding-left: 20px; }
-        .market-ticker { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; font-family: monospace; font-size: 0.85rem; display: flex; justify-content: space-around; margin-bottom: 20px; }
         
-        /* Configuration UI */
-        #config-panel { background: #333; color: white; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: sans-serif; }
-        #config-panel input { margin-right: 10px; padding: 5px; }
-        .hidden { display: none !important; }
-        button { cursor: pointer; padding: 5px 15px; background: #eee; border: 1px solid #ccc; font-weight: bold; }
-        button:hover { background: #ddd; }
+        /* Status UI */
+        #status-bar { background: #eee; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; font-family: monospace; }
+        .loading-pulse { animation: pulse 1.5s infinite; color: #888; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="config-panel">
-        <strong>Editor's Desk:</strong> Enter your API keys to begin publishing.
-        <br><br>
-        <input type="password" id="openai_key" placeholder="OpenAI Key">
-        <input type="password" id="news_api_key" placeholder="NewsAPI Key">
-        <input type="password" id="pexels_key" placeholder="Pexels Key">
-        <button onclick="startPublishing()">Publish Today's Edition</button>
+    <div id="status-bar">
+        <strong>System Status:</strong> <span id="status-text">Ready to download local AI model...</span>
+        <button id="start-btn" onclick="initializeHerald()">Begin Publication</button>
     </div>
 
     <div class="paper-container">
         <header>
             <div class="metadata">
                 <span>Vol. CXIV ... No. 82</span>
-                <span id="current-date">Fetching date...</span>
+                <span id="pub-date">Friday, March 27, 2026</span>
                 <span>Hillsboro Edition</span>
             </div>
             <h1>The Daily Herald</h1>
         </header>
 
-        <div class="market-ticker">
-            <span>S&P 500: 6,545.21 <span style="color:red">▼</span></span>
-            <span>DOW: 45,771.64 <span style="color:red">▼</span></span>
-            <span>NASDAQ: 24,098.62 <span style="color:red">▼</span></span>
-            <span>BRENT CRUDE: $109.31 <span style="color:green">▲</span></span>
-        </div>
-
         <div class="main-grid">
             <main>
-                <section id="politics">
+                <section>
                     <span class="section-label">World & Politics</span>
-                    <h2 id="pol-headline">Awaiting Dispatch...</h2>
-                    <span class="byline">By Viola Davis, Chief Correspondent</span>
-                    <img src="https://via.placeholder.com/800x450?text=Press+Start" id="pol-image" class="hero-img" alt="Headline Image">
-                    <p id="pol-content">The editorial team is currently gathering intelligence from global wires. Please stand by for the latest developments from our bureaus.</p>
+                    <h2 id="pol-headline">Awaiting Dispatch</h2>
+                    <span style="font-style: italic;">By Viola Davis, Chief Correspondent</span>
+                    <img id="pol-image" src="https://loremflickr.com/800/450/news,vintage" class="hero-img">
+                    <p id="pol-content">Initializing local AI engine. This may take a moment depending on your connection...</p>
                 </section>
             </main>
 
             <aside class="sidebar">
-                <section id="sports">
-                    <span class="section-label">Sports</span>
-                    <h3 id="sports-headline">Final Scores Pending</h3>
-                    <p id="sports-content">Athletic reports are being compiled by our sports desk.</p>
-                </section>
-                <hr>
-                <section id="culture">
-                    <span class="section-label">Culture</span>
-                    <h3 id="culture-headline">The Arts & Society</h3>
-                    <p id="culture-content">Cultural critiques and entertainment news will follow shortly.</p>
-                </section>
+                <span class="section-label">Top Stories</span>
+                <div id="sidebar-stories">
+                    <p>Fetching latest news from the global wires...</p>
+                </div>
             </aside>
         </div>
     </div>
 
-    <script>
-        // Set Today's Date
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
+    <script type="module">
+        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
 
-        async function startPublishing() {
-            const keys = {
-                openai: document.getElementById('openai_key').value,
-                news: document.getElementById('news_api_key').value,
-                pexels: document.getElementById('pexels_key').value
-            };
+        let engine;
+        const statusEl = document.getElementById('status-text');
 
-            if (!keys.openai || !keys.news || !keys.pexels) {
-                alert("All API keys are required.");
-                return;
-            }
-
-            document.getElementById('config-panel').classList.add('hidden');
+        window.initializeHerald = async () => {
+            document.getElementById('start-btn').style.display = 'none';
             
-            // Define sections
-            const sections = [
-                { id: 'pol', category: 'politics', label: 'World & Politics' },
-                { id: 'sports', category: 'sports', label: 'Sports' },
-                { id: 'culture', category: 'entertainment', label: 'Culture' }
-            ];
-
-            for (const section of sections) {
-                await processSection(section, keys);
-            }
-        }
-
-        async function processSection(section, keys) {
-            console.log(`Processing ${section.category}...`);
-            
-            // 1. Fetch News
-            let newsData = { title: "Wires Down", description: "Communication limited." };
             try {
-                const res = await fetch(`https://newsapi.org/v2/top-headlines?category=${section.category}&language=en&apiKey=${keys.news}`);
-                const data = await res.json();
-                if (data.articles && data.articles.length > 0) {
-                    newsData = data.articles[0];
-                }
-            } catch (e) { console.error("News fetch failed", e); }
-
-            // 2. Fetch Image (Pexels)
-            let imageUrl = "https://via.placeholder.com/800x450?text=The+Daily+Herald";
-            try {
-                const imgKeyword = newsData.title.split(' ').slice(-1)[0];
-                const res = await fetch(`https://api.pexels.com/v1/search?query=${imgKeyword}&per_page=1`, {
-                    headers: { Authorization: keys.pexels }
+                // 1. Initialize Local AI (Llama-3-8B)
+                // Note: First run will download several GBs to browser cache
+                engine = await webllm.CreateMLCEngine("Llama-3-8B-Instruct-v0.1-q4f16_1-MLC", {
+                    initProgressCallback: (report) => {
+                        statusEl.innerText = `Loading AI: ${report.text}`;
+                    }
                 });
-                const data = await res.json();
-                if (data.photos && data.photos.length > 0) {
-                    imageUrl = data.photos[0].src.large;
-                }
-            } catch (e) { console.error("Pexels fetch failed", e); }
 
-            // 3. AI Rewrite (OpenAI)
-            let aiContent = "Our reporters are currently on the scene. Full story to follow as details emerge.";
-            try {
-                const res = await fetch("https://api.openai.com/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${keys.openai}`
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-4o",
-                        messages: [
-                            { role: "system", content: "You are a Pulitzer Prize-winning editor. Use the persona of Viola Davis." },
-                            { role: "user", content: `Write a formal, high-prestige 120-word news story for the ${section.label} section based on this: ${newsData.title}. Context: ${newsData.description}.` }
-                        ]
-                    })
-                });
-                const data = await res.json();
-                aiContent = data.choices[0].message.content;
-            } catch (e) { console.error("OpenAI fetch failed", e); }
-
-            // 4. Update UI
-            document.getElementById(`${section.id}-headline`).innerText = newsData.title;
-            document.getElementById(`${section.id}-content`).innerText = aiContent;
-            
-            const imgEl = document.getElementById(`${section.id}-image`);
-            if (imgEl) {
-                imgEl.src = imageUrl;
+                statusEl.innerText = "AI Loaded. Fetching news...";
+                await runPublication();
+            } catch (err) {
+                statusEl.innerText = "Error: " + err.message + ". Ensure WebGPU is enabled.";
             }
+        };
+
+        async function runPublication() {
+            // 2. Fetch News via RSS (Using AllOrigins proxy to bypass CORS)
+            const rssUrl = encodeURIComponent("https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml");
+            const res = await fetch(`https://api.allorigins.win/get?url=${rssUrl}`);
+            const data = await res.json();
+            
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(data.contents, "text/xml");
+            const items = Array.from(xml.querySelectorAll("item")).slice(0, 3);
+
+            // 3. Process the Main Story (Politics)
+            const mainStory = items[0];
+            const headline = mainStory.querySelector("title").textContent;
+            const snippet = mainStory.querySelector("description").textContent;
+
+            document.getElementById('pol-headline').innerText = headline;
+            document.getElementById('pol-image').src = `https://loremflickr.com/800/450/${headline.split(' ').pop()},city,vintage`;
+
+            // 4. Local AI Generation (Viola Davis Persona)
+            statusEl.innerText = "Viola Davis is writing the lead story...";
+            const prompt = `You are Viola Davis, a Pulitzer Prize-winning journalist. Write a formal, authoritative 100-word news story about: ${headline}. Context: ${snippet}. Start immediately with the story.`;
+            
+            const chunks = await engine.chat.completions.create({
+                messages: [{ role: "user", content: prompt }],
+                temperature: 0.7,
+            });
+            
+            document.getElementById('pol-content').innerText = chunks.choices[0].message.content;
+
+            // 5. Fill Sidebar
+            const sidebarHtml = items.slice(1).map(item => `
+                <h3>${item.querySelector("title").textContent}</h3>
+                <p style="font-size: 0.9rem;">${item.querySelector("description").textContent}</p>
+                <hr>
+            `).join('');
+            document.getElementById('sidebar-stories').innerHTML = sidebarHtml;
+
+            statusEl.innerText = "Edition Published Successfully.";
         }
     </script>
 </body>
