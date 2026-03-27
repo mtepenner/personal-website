@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Multi-Tool</title>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; --text: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        header { background-color: var(--primary); color: white; padding: 20px; text-align: center; }
+        .container { display: flex; max-width: 1200px; margin: 20px auto; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; }
+        .sidebar { width: 250px; background: #ecf0f1; padding: 20px 0; border-right: 1px solid #ddd; }
+        .sidebar button { display: block; width: 100%; padding: 15px 20px; text-align: left; background: none; border: none; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .sidebar button:hover, .sidebar button.active { background: var(--secondary); color: white; }
+        .content { flex: 1; padding: 30px; overflow-y: auto; max-height: 800px; }
+        .tool-section { display: none; }
+        .tool-section.active { display: block; }
+        h2 { border-bottom: 2px solid var(--secondary); padding-bottom: 10px; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button.action-btn { background: var(--secondary); color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        button.action-btn:hover { background: #2980b9; }
+        .output { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; margin-top: 20px; font-family: monospace; white-space: pre-wrap; min-height: 50px; }
+        .diagram-placeholder { background: #e0e0e0; border: 1px dashed #999; padding: 20px; text-align: center; margin-bottom: 20px; color: #666; font-style: italic;}
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Postgrad Math Multi-Tool</h1>
+    <p>A JavaScript port of C++ analytical tools</p>
+</header>
+
+<div class="container">
+    <div class="sidebar">
+        <button class="tab-btn active" onclick="showTab('about')">📖 About</button>
+        <button class="tab-btn" onclick="showTab('chem')">🧪 Chemical Balancer</button>
+        <button class="tab-btn" onclick="showTab('geom')">📐 Geometry & Trig</button>
+        <button class="tab-btn" onclick="showTab('kinematics')">🚗 Kinematics Solver</button>
+        <button class="tab-btn" onclick="showTab('matrix')">🧮 Matrix Solver</button>
+        <button class="tab-btn" onclick="showTab('poly')">📈 Polynomial Roots</button>
+        <button class="tab-btn" onclick="showTab('stats')">📊 Statistics Engine</button>
+        <button class="tab-btn" onclick="showTab('calc')">∫ Calculus III</button>
+    </div>
+
+    <div class="content">
+        <div id="about" class="tool-section active">
+            <h2>About This Multi-Tool</h2>
+            <p>Translated from C++ utilities designed to solve common mathematical, chemical, and physical problems.</p>
+            <ul>
+                <li><strong>Geometry Multi-Tool:</strong> Calculate area, perimeter, volume, surface area, and trig functions.</li>
+                <li><strong>Matrix Solver:</strong> Gaussian Elimination with partial pivoting.</li>
+                <li><strong>Polynomial Root Finder:</strong> Durand-Kerner algorithm with complex numbers.</li>
+                <li><strong>Chemical Equation Balancer:</strong> Brute-force solver for reaction coefficients.</li>
+                <li><strong>Kinematics Auto-Solver:</strong> Calculates missing physical variables automatically.</li>
+                <li><strong>Stats & Calculus:</strong> Mean/variance calculations and 3D vector gradient math.</li>
+            </ul>
+        </div>
+
+        <div id="chem" class="tool-section">
+            <h2>Chemical Equation Balancer</h2>
+            <p>Finds the lowest whole-number coefficients for A + B -> C + D.</p>
+            <div class="diagram-placeholder"></div>
+            <div id="chem-inputs">
+                <div class="form-group">
+                    <label>Element 1 (Symbol, R1 atoms, R2 atoms, P1 atoms, P2 atoms) comma separated:</label>
+                    <input type="text" id="chem-el1" placeholder="e.g., C, 1, 0, 1, 0" value="C, 1, 0, 1, 0">
+                </div>
+                <div class="form-group">
+                    <label>Element 2 (Symbol, R1, R2, P1, P2):</label>
+                    <input type="text" id="chem-el2" placeholder="e.g., H, 4, 0, 0, 2" value="H, 4, 0, 0, 2">
+                </div>
+                <div class="form-group">
+                    <label>Element 3 (Symbol, R1, R2, P1, P2):</label>
+                    <input type="text" id="chem-el3" placeholder="e.g., O, 0, 2, 2, 1" value="O, 0, 2, 2, 1">
+                </div>
+            </div>
+            <button class="action-btn" onclick="solveChemistry()">Balance Equation</button>
+            <div class="output" id="chem-out">Ready...</div>
+        </div>
+
+        <div id="geom" class="tool-section">
+            <h2>Geometry & Trigonometry</h2>
+            <p>Calculate shapes, hypotenuses, and trig functions.</p>
+            <div class="diagram-placeholder"></div>
+            <select id="geom-type" onchange="updateGeomUI()">
+                <option value="circle">Circle (Area/Perimeter)</option>
+                <option value="rect">Rectangle (Area/Perimeter)</option>
+                <option value="sphere">Sphere (Volume/Surface Area)</option>
+                <option value="pythagoras">Pythagorean Theorem</option>
+                <option value="trig">Trigonometry</option>
+            </select>
+            <div id="geom-inputs" style="margin-top:15px;">
+                </div>
+            <button class="action-btn" onclick="solveGeometry()">Calculate</button>
+            <div class="output" id="geom-out">Ready...</div>
+        </div>
+
+        <div id="kinematics" class="tool-section">
+            <h2>Kinematics Auto-Solver</h2>
+            <p>Enter knowns, leave unknowns blank. Solves automatically.</p>
+            <div class="diagram-placeholder"></div>
+            <div class="form-group"><label>Displacement (d):</label><input type="number" id="kin-d" step="any"></div>
+            <div class="form-group"><label>Initial Velocity (vi):</label><input type="number" id="kin-vi" step="any"></div>
+            <div class="form-group"><label>Final Velocity (vf):</label><input type="number" id="kin-vf" step="any"></div>
+            <div class="form-group"><label>Acceleration (a):</label><input type="number" id="kin-a" step="any"></div>
+            <div class="form-group"><label>Time (t):</label><input type="number" id="kin-t" step="any"></div>
+            <button class="action-btn" onclick="solveKin()">Solve System</button>
+            <div class="output" id="kin-out">Ready...</div>
+        </div>
+
+        <div id="matrix" class="tool-section">
+            <h2>Matrix Solver (Gaussian Elimination)</h2>
+            <p>Uses partial pivoting for numerical stability. Enter the augmented matrix row by row, comma separated.</p>
+            <div class="form-group">
+                <label>Augmented Matrix (e.g., for 2x2 with constants: "2, 1, 5 \n 1, -1, 1"):</label>
+                <textarea id="matrix-input" rows="5">2, 1, 5&#10;1, -1, 1</textarea>
+            </div>
+            <button class="action-btn" onclick="solveMat()">Solve Matrix</button>
+            <div class="output" id="matrix-out">Ready...</div>
+        </div>
+
+        <div id="poly" class="tool-section">
+            <h2>Polynomial Root Finder</h2>
+            <p>Finds complex roots using the Durand-Kerner algorithm and Horner's method.</p>
+            <div class="form-group">
+                <label>Coefficients (highest degree to constant, comma separated):</label>
+                <input type="text" id="poly-input" value="1, 0, 1" placeholder="e.g. 1, 0, 1 for x^2 + 1 = 0">
+            </div>
+            <button class="action-btn" onclick="solvePoly()">Find Roots</button>
+            <div class="output" id="poly-out">Ready...</div>
+        </div>
+
+        <div id="stats" class="tool-section">
+            <h2>Statistics Engine</h2>
+            <p>Calculate descriptive stats. Paste CSV column data below.</p>
+            <div class="form-group">
+                <label>Data Column (comma or newline separated):</label>
+                <textarea id="stats-input" rows="5">12.5, 14.2, 10.1, 15.6, 11.2</textarea>
+            </div>
+            <button class="action-btn" onclick="calcStats()">Analyze Data</button>
+            <div class="output" id="stats-out">Ready...</div>
+        </div>
+
+        <div id="calc" class="tool-section">
+            <h2>Calculus III: Vectors & Gradients</h2>
+            <p>Vector arithmetic and partial derivatives for f(x,y,z) = x^2 + yz.</p>
+            <div class="diagram-placeholder"></div>
+            <div class="form-group">
+                <label>Vector A (x, y, z):</label> <input type="text" id="calc-va" value="1, 3, -2">
+                <label>Vector B (x, y, z):</label> <input type="text" id="calc-vb" value="4, -1, 0">
+                <label>Point for Gradient f(x,y,z) (x, y, z):</label> <input type="text" id="calc-pt" value="2, 1, 3">
+            </div>
+            <button class="action-btn" onclick="solveCalc()">Calculate Operations</button>
+            <div class="output" id="calc-out">Ready...</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- UI LOGIC ---
+    function showTab(tabId) {
+        document.querySelectorAll('.tool-section').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // --- CHEMISTRY LOGIC ---
+    function solveChemistry() {
+        let out = document.getElementById("chem-out");
+        let limit = 20;
+        let R1=[], R2=[], P1=[], P2=[], names=[];
+        
+        for(let i=1; i<=3; i++) {
+            let val = document.getElementById("chem-el"+i).value;
+            if(!val) continue;
+            let parts = val.split(",").map(s => s.trim());
+            if(parts.length === 5) {
+                names.push(parts[0]);
+                R1.push(parseInt(parts[1])); R2.push(parseInt(parts[2]));
+                P1.push(parseInt(parts[3])); P2.push(parseInt(parts[4]));
+            }
+        }
+        
+        if(names.length === 0) return out.innerText = "Please provide valid element data.";
+        out.innerText = "Calculating...\n";
+
+        for (let a = 1; a <= limit; ++a) {
+            for (let b = 1; b <= limit; ++b) {
+                for (let c = 1; c <= limit; ++c) {
+                    for (let d = 1; d <= limit; ++d) {
+                        let balanced = true;
+                        for (let i = 0; i < names.length; ++i) {
+                            if ((a * R1[i] + b * R2[i]) !== (c * P1[i] + d * P2[i])) {
+                                balanced = false; break;
+                            }
+                        }
+                        if (balanced) {
+                            return out.innerText = `Balanced Coefficients Found!\nReactant 1 (a): ${a}\nReactant 2 (b): ${b}\nProduct 1 (c): ${c}\nProduct 2 (d): ${d}`;
+                        }
+                    }
+                }
+            }
+        }
+        out.innerText = "Could not find coefficients under " + limit;
+    }
+
+    // --- GEOMETRY LOGIC ---
+    function updateGeomUI() {
+        let type = document.getElementById("geom-type").value;
+        let html = "";
+        if(type === "circle" || type === "sphere") html = `<label>Radius:</label><input type="number" id="geom-val1">`;
+        else if(type === "rect") html = `<label>Length:</label><input type="number" id="geom-val1"><label>Width:</label><input type="number" id="geom-val2">`;
+        else if(type === "pythagoras") html = `<label>Leg a:</label><input type="number" id="geom-val1"><label>Leg b:</label><input type="number" id="geom-val2">`;
+        else if(type === "trig") html = `<label>Degrees:</label><input type="number" id="geom-val1">`;
+        document.getElementById("geom-inputs").innerHTML = html;
+    }
+    updateGeomUI();
+
+    function solveGeometry() {
+        let type = document.getElementById("geom-type").value;
+        let v1 = parseFloat(document.getElementById("geom-val1")?.value || 0);
+        let v2 = parseFloat(document.getElementById("geom-val2")?.value || 0);
+        let out = "";
+        const PI = Math.PI;
+
+        if (type === "circle") out = `Area: ${PI * v1 * v1}\nPerimeter: ${2 * PI * v1}`;
+        else if (type === "rect") out = `Area: ${v1 * v2}\nPerimeter: ${2 * (v1 + v2)}`;
+        else if (type === "sphere") out = `Volume: ${(4.0/3.0) * PI * Math.pow(v1, 3)}\nSurface Area: ${4 * PI * Math.pow(v1, 2)}`;
+        else if (type === "pythagoras") out = `Hypotenuse (c): ${Math.sqrt(v1*v1 + v2*v2)}`;
+        else if (type === "trig") {
+            let rad = v1 * (PI / 180.0);
+            out = `sin(${v1}) = ${Math.sin(rad)}\ncos(${v1}) = ${Math.cos(rad)}\ntan(${v1}) = ${Math.tan(rad)}`;
+        }
+        document.getElementById("geom-out").innerText = out;
+    }
+
+    // --- KINEMATICS LOGIC ---
+    function solveKin() {
+        let getVal = id => { let v = document.getElementById(id).value; return v === "" ? null : parseFloat(v); };
+        let d = getVal('kin-d'), vi = getVal('kin-vi'), vf = getVal('kin-vf'), a = getVal('kin-a'), t = getVal('kin-t');
+        
+        let isK = v => v !== null && !isNaN(v);
+        let passes = 0;
+
+        while ((!isK(d) || !isK(vi) || !isK(vf) || !isK(a) || !isK(t)) && passes < 3) {
+            if (!isK(vf) && isK(vi) && isK(a) && isK(t)) vf = vi + a * t;
+            if (!isK(vi) && isK(vf) && isK(a) && isK(t)) vi = vf - a * t;
+            if (!isK(a) && isK(vf) && isK(vi) && isK(t)) a = (vf - vi) / t;
+            if (!isK(t) && isK(vf) && isK(vi) && isK(a)) t = (vf - vi) / a;
+
+            if (!isK(d) && isK(vi) && isK(t) && isK(a)) d = vi * t + 0.5 * a * Math.pow(t, 2);
+            if (!isK(vi) && isK(d) && isK(t) && isK(a)) vi = (d - 0.5 * a * Math.pow(t, 2)) / t;
+            if (!isK(a) && isK(d) && isK(vi) && isK(t)) a = (2 * (d - vi * t)) / Math.pow(t, 2);
+
+            if (!isK(vf) && isK(vi) && isK(a) && isK(d)) vf = Math.sqrt(Math.pow(vi, 2) + 2 * a * d);
+            if (!isK(vi) && isK(vf) && isK(a) && isK(d)) vi = Math.sqrt(Math.pow(vf, 2) - 2 * a * d);
+            if (!isK(a) && isK(vf) && isK(vi) && isK(d)) a = (Math.pow(vf, 2) - Math.pow(vi, 2)) / (2 * d);
+            if (!isK(d) && isK(vf) && isK(vi) && isK(a)) d = (Math.pow(vf, 2) - Math.pow(vi, 2)) / (2 * a);
+
+            if (!isK(d) && isK(vi) && isK(vf) && isK(t)) d = ((vi + vf) / 2.0) * t;
+            if (!isK(vi) && isK(d) && isK(vf) && isK(t)) vi = (2 * d / t) - vf;
+            if (!isK(vf) && isK(d) && isK(vi) && isK(t)) vf = (2 * d / t) - vi;
+            if (!isK(t) && isK(d) && isK(vi) && isK(vf)) t = (2 * d) / (vi + vf);
+
+            passes++;
+        }
+
+        let out = document.getElementById("kin-out");
+        if (!isK(d) || !isK(vi) || !isK(vf) || !isK(a) || !isK(t)) {
+            out.innerText = "Error: Not enough info to solve kinematics. Provide at least 3 knowns.";
+        } else {
+            out.innerText = `d = ${d} m\nvi = ${vi} m/s\nvf = ${vf} m/s\na = ${a} m/s^2\nt = ${t} s`;
+            document.getElementById('kin-d').value = d;
+            document.getElementById('kin-vi').value = vi;
+            document.getElementById('kin-vf').value = vf;
+            document.getElementById('kin-a').value = a;
+            document.getElementById('kin-t').value = t;
+        }
+    }
+
+    // --- MATRIX LOGIC ---
+    function solveMat() {
+        let text = document.getElementById("matrix-input").value;
+        let rows = text.trim().split("\n");
+        let matrix = rows.map(r => r.split(",").map(Number));
+        let n = matrix.length;
+        let out = document.getElementById("matrix-out");
+
+        for(let r of matrix) {
+            if(r.length !== n + 1) return out.innerText = "Error: Invalid augmented matrix format.";
+        }
+
+        for (let i = 0; i < n; ++i) {
+            let pivotRow = i;
+            for (let k = i + 1; k < n; ++k) {
+                if (Math.abs(matrix[k][i]) > Math.abs(matrix[pivotRow][i])) pivotRow = k;
+            }
+            if (pivotRow !== i) {
+                let temp = matrix[i]; matrix[i] = matrix[pivotRow]; matrix[pivotRow] = temp;
+            }
+            if (Math.abs(matrix[i][i]) < 1e-10) return out.innerText = "Error: Matrix is singular.";
+
+            for (let k = i + 1; k < n; ++k) {
+                let factor = matrix[k][i] / matrix[i][i];
+                for (let j = i; j <= n; ++j) matrix[k][j] -= factor * matrix[i][j];
+            }
+        }
+
+        let solution = new Array(n).fill(0);
+        for (let i = n - 1; i >= 0; --i) {
+            let sum = matrix[i][n];
+            for (let j = i + 1; j < n; ++j) sum -= matrix[i][j] * solution[j];
+            solution[i] = sum / matrix[i][i];
+        }
+
+        let res = "Solution:\n";
+        for(let i=0; i<n; i++) res += `x${i+1} = ${Math.abs(solution[i]) < 1e-9 ? 0 : solution[i].toFixed(4)}\n`;
+        out.innerText = res;
+    }
+
+    // --- POLYNOMIAL LOGIC ---
+    class Complex {
+        constructor(r, i=0) { this.r = r; this.i = i; }
+        add(c) { return new Complex(this.r + (c.r||0), this.i + (c.i||0)); }
+        sub(c) { return new Complex(this.r - (c.r||0), this.i - (c.i||0)); }
+        mul(c) { return new Complex(this.r*c.r - this.i*c.i, this.r*c.i + this.i*c.r); }
+        div(c) { let den = c.r*c.r + c.i*c.i; return new Complex((this.r*c.r + this.i*c.i)/den, (this.i*c.r - this.r*c.i)/den); }
+        mag() { return Math.sqrt(this.r*this.r + this.i*this.i); }
+    }
+
+    function solvePoly() {
+        let coeffs = document.getElementById("poly-input").value.split(",").map(n => new Complex(parseFloat(n)));
+        let out = document.getElementById("poly-out");
+        let degree = coeffs.length - 1;
+        
+        if (degree < 1) return out.innerText = "Degree must be at least 1.";
+        if (Math.abs(coeffs[0].r) === 0) return out.innerText = "Leading coefficient cannot be zero.";
+
+        let leading = coeffs[0];
+        coeffs = coeffs.map(c => c.div(leading));
+
+        let roots = [];
+        let r_init = new Complex(0.4, 0.9);
+        for (let i = 0; i < degree; ++i) {
+            // Complex exponentiation by integer
+            let p = new Complex(1, 0);
+            for(let j=0; j<i; j++) p = p.mul(r_init);
+            roots.push(p);
+        }
+
+        for (let iter = 0; iter < 2000; ++iter) {
+            let maxDiff = 0;
+            let nextRoots = roots.map(r => new Complex(r.r, r.i));
+
+            for (let i = 0; i < degree; ++i) {
+                // Evaluate P(x)
+                let num = new Complex(0,0);
+                for (let c of coeffs) num = num.mul(roots[i]).add(c);
+                
+                let den = new Complex(1,0);
+                for (let j = 0; j < degree; ++j) {
+                    if (i !== j) den = den.mul(roots[i].sub(roots[j]));
+                }
+
+                let correction = num.div(den);
+                nextRoots[i] = nextRoots[i].sub(correction);
+                maxDiff = Math.max(maxDiff, correction.mag());
+            }
+            roots = nextRoots;
+            if (maxDiff < 1e-10) break;
+        }
+
+        let res = "Roots:\n";
+        roots.forEach((root, i) => {
+            let r = Math.abs(root.r) < 1e-9 ? 0 : root.r.toFixed(5);
+            let im = Math.abs(root.i) < 1e-9 ? 0 : root.i.toFixed(5);
+            res += `Root ${i+1} = ${r} ${im >= 0 ? '+' : '-'} ${Math.abs(im)}i\n`;
+        });
+        out.innerText = res;
+    }
+
+    // --- STATISTICS LOGIC ---
+    function calcStats() {
+        let text = document.getElementById("stats-input").value;
+        let data = text.split(/[\n,]+/).map(s => s.trim()).filter(s => s).map(Number).filter(n => !isNaN(n));
+        let out = document.getElementById("stats-out");
+        
+        if(data.length === 0) return out.innerText = "No numeric data found.";
+        
+        let sum = data.reduce((a,b)=>a+b, 0);
+        let mean = sum / data.length;
+        
+        let sorted = [...data].sort((a,b)=>a-b);
+        let mid = Math.floor(sorted.length / 2);
+        let median = sorted.length % 2 === 0 ? (sorted[mid-1] + sorted[mid]) / 2 : sorted[mid];
+        
+        let variance = data.length > 1 ? data.reduce((a,b) => a + Math.pow(b - mean, 2), 0) / (data.length - 1) : 0;
+        let stdDev = Math.sqrt(variance);
+
+        out.innerText = `Records: ${data.length}\nMean: ${mean.toFixed(4)}\nMedian: ${median.toFixed(4)}\nSample Variance: ${variance.toFixed(4)}\nStd Dev: ${stdDev.toFixed(4)}`;
+    }
+
+    // --- CALCULUS LOGIC ---
+    function solveCalc() {
+        let parseV = id => document.getElementById(id).value.split(",").map(Number);
+        let va = parseV("calc-va"), vb = parseV("calc-vb"), pt = parseV("calc-pt");
+        let out = document.getElementById("calc-out");
+
+        let dot = va[0]*vb[0] + va[1]*vb[1] + va[2]*vb[2];
+        let cross = [va[1]*vb[2] - va[2]*vb[1], va[2]*vb[0] - va[0]*vb[2], va[0]*vb[1] - va[1]*vb[0]];
+        let magA = Math.sqrt(va[0]*va[0] + va[1]*va[1] + va[2]*va[2]);
+
+        let f = (x,y,z) => x*x + y*z;
+        let h = 1e-7;
+        let px = (f(pt[0]+h, pt[1], pt[2]) - f(pt[0], pt[1], pt[2])) / h;
+        let py = (f(pt[0], pt[1]+h, pt[2]) - f(pt[0], pt[1], pt[2])) / h;
+        let pz = (f(pt[0], pt[1], pt[2]+h) - f(pt[0], pt[1], pt[2])) / h;
+
+        out.innerText = `1. Vector Operations:\nDot Product: ${dot}\nCross Product: <${cross[0]}, ${cross[1]}, ${cross[2]}>\nMagnitude of A: ${magA.toFixed(4)}\n\n` +
+                        `2. Gradient of f(x,y,z)=x^2+yz at (${pt.join(",")}):\n` +
+                        `<${px.toFixed(4)}, ${py.toFixed(4)}, ${pz.toFixed(4)}>`;
+    }
+</script>
+
+</body>
+</html>
