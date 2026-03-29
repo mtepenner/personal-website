@@ -72,7 +72,7 @@
             try {
                 // 1. Initialize Local AI (Llama-3-8B)
                 // Note: First run will download several GBs to browser cache
-                engine = await webllm.CreateMLCEngine("Llama-3-8B-Instruct-v0.1-q4f16_1-MLC", {
+                engine = await webllm.CreateMLCEngine("Llama-3-8B-Instruct-q4f16_1-MLC", {
                     initProgressCallback: (report) => {
                         statusEl.innerText = `Loading AI: ${report.text}`;
                     }
