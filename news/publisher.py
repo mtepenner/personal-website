@@ -79,7 +79,7 @@ for key, cat in sections.items():
 # --- LOAD AND RENDER ---
 print("Printing today's edition...")
 try:
-    with open("daily_herald.html", "r") as f:
+    with open("index.html", "r") as f:
         template_content = f.read()
 except FileNotFoundError:
     # A basic fallback template if the HTML file doesn't exist yet
