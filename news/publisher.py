@@ -43,7 +43,7 @@ def viola_davis_rewrite(headline, snippet, section):
 
     try:
         response = client.chat.completions.create(
-            model="llama3", # Ensure this matches your downloaded local model
+            model="Llama-3-8B-Instruct-v0.1-q4f16_1-MLC", # Ensure this matches your downloaded local model
             messages=[{"role": "system", "content": "You are a Pulitzer Prize-winning editor."},
                       {"role": "user", "content": prompt}]
         )
