@@ -577,19 +577,42 @@
         
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
-        
-        osc.type = 'square'; // Chiptune sound
+    
+        // --- PULSE WAVE SIMULATION (Game Boy Style) ---
+        // A real square wave (50% duty) sounds like a clarinet. 
+        // This creates a "thin" pulse wave (approx 25% duty) for that 8-bit twang.
+        const real = new Float32Array([0, 0, 0, 1, 1]); 
+        const imag = new Float32Array([0, 0, 0, 0, 0]);
+        const wave = audioCtx.createPeriodicWave(real, imag);
+        osc.setPeriodicWave(wave);
+    
         osc.frequency.value = freq;
-        
-        // Envelope to avoid clicking and make it sound 8-bit
-        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (durationMs / 1000) - 0.05);
+    
+        // --- VIBRATO (The "Wobble") ---
+        // Game Boy music often has a slight frequency wobble.
+        const vibrato = audioCtx.createOscillator();
+        const vibratoGain = audioCtx.createGain();
+        vibrato.frequency.value = 6; // Speed of wobble
+        vibratoGain.gain.value = freq * 0.005; // Depth of wobble
+        vibrato.connect(vibratoGain);
+        vibratoGain.connect(osc.frequency);
+        vibrato.start();
+    
+        // --- ENVELOPE (The "Pluck") ---
+        const now = audioCtx.currentTime;
+        gainNode.gain.setValueAtTime(0, now);
+        // Instant attack
+        gainNode.gain.linearRampToValueAtTime(0.15, now + 0.01); 
+        // Fast decay to a lower sustain level, then fade
+        gainNode.gain.exponentialRampToValueAtTime(0.05, now + (durationMs / 1000) * 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + (durationMs / 1000));
         
         osc.connect(gainNode);
         gainNode.connect(audioCtx.destination);
         
         osc.start();
-        osc.stop(audioCtx.currentTime + (durationMs / 1000));
+        osc.stop(now + (durationMs / 1000));
+        vibrato.stop(now + (durationMs / 1000));
     }
 
     function playNextNote() {
@@ -598,7 +621,8 @@
         const [noteName, durationInBeats] = melody[currentNote];
         const durationMs = durationInBeats * beatDuration;
         
-        playTone(notes[noteName], durationMs);
+        // Play the note for 90% of its duration to create a "gap" between notes
+        playTone(notes[noteName], durationMs * 0.9);
         
         currentNote = (currentNote + 1) % melody.length;
         musicInterval = setTimeout(playNextNote, durationMs);
