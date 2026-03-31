@@ -567,52 +567,50 @@
     notes['F5'] = 698.46;
     notes['A5'] = 880.00;
     notes['G5'] = 783.99;
+    notes['A3'] = 220.00; 
+    notes['E4'] = 329.63; 
+    notes['B3'] = 246.94; 
+    notes['C4'] = 261.63;
 
     let currentNote = 0;
-    const bpm = 110; // ORIGINAL MODERATE TEMPO - NOT SPED UP
+    const bpm = 155; // ORIGINAL MODERATE TEMPO - NOT SPED UP
     const beatDuration = 60000 / bpm; 
 
-    function playTone(freq, durationMs) {
+    function playRichTone(freq, durationMs, type = 'lead') {
         if (!audioCtx || freq === 0) return;
         
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
+        const now = audioCtx.currentTime;
     
-        // --- PULSE WAVE SIMULATION (Game Boy Style) ---
-        // A real square wave (50% duty) sounds like a clarinet. 
-        // This creates a "thin" pulse wave (approx 25% duty) for that 8-bit twang.
-        const real = new Float32Array([0, 0, 0, 1, 1]); 
-        const imag = new Float32Array([0, 0, 0, 0, 0]);
-        const wave = audioCtx.createPeriodicWave(real, imag);
-        osc.setPeriodicWave(wave);
+        if (type === 'lead') {
+            // LEAD: Pulse wave with a snappy "plunk"
+            const real = new Float32Array([0, 0, 0.6, 0.4, 0.2]);
+            const wave = audioCtx.createPeriodicWave(real, new Float32Array(real.length));
+            osc.setPeriodicWave(wave);
+            
+            // Faster vibrato for the higher tempo
+            const v = audioCtx.createOscillator();
+            const vg = audioCtx.createGain();
+            v.frequency.value = 8; 
+            vg.gain.value = freq * 0.004;
+            v.connect(vg); vg.connect(osc.frequency);
+            v.start(); v.stop(now + durationMs/1000);
+            
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + (durationMs/1000));
+        } else if (type === 'bass') {
+            // BASS: Deep Triangle to fill the room
+            osc.type = 'triangle';
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0.01, now + (durationMs/1000));
+        }
     
         osc.frequency.value = freq;
-    
-        // --- VIBRATO (The "Wobble") ---
-        // Game Boy music often has a slight frequency wobble.
-        const vibrato = audioCtx.createOscillator();
-        const vibratoGain = audioCtx.createGain();
-        vibrato.frequency.value = 6; // Speed of wobble
-        vibratoGain.gain.value = freq * 0.005; // Depth of wobble
-        vibrato.connect(vibratoGain);
-        vibratoGain.connect(osc.frequency);
-        vibrato.start();
-    
-        // --- ENVELOPE (The "Pluck") ---
-        const now = audioCtx.currentTime;
-        gainNode.gain.setValueAtTime(0, now);
-        // Instant attack
-        gainNode.gain.linearRampToValueAtTime(0.15, now + 0.01); 
-        // Fast decay to a lower sustain level, then fade
-        gainNode.gain.exponentialRampToValueAtTime(0.05, now + (durationMs / 1000) * 0.5);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, now + (durationMs / 1000));
-        
         osc.connect(gainNode);
         gainNode.connect(audioCtx.destination);
-        
         osc.start();
-        osc.stop(now + (durationMs / 1000));
-        vibrato.stop(now + (durationMs / 1000));
+        osc.stop(now + (durationMs/1000));
     }
 
     function playNextNote() {
@@ -620,10 +618,16 @@
         
         const [noteName, durationInBeats] = melody[currentNote];
         const durationMs = durationInBeats * beatDuration;
-        
-        // Play the note for 90% of its duration to create a "gap" between notes
-        playTone(notes[noteName], durationMs * 0.9);
-        
+    
+        // Layer 1: The Fast Lead
+        playRichTone(notes[noteName], durationMs * 0.85, 'lead');
+    
+        // Layer 2: The Driving Bass (2 octaves down)
+        const bassFreq = notes[noteName] / 4; 
+        if (bassFreq > 30) {
+            playRichTone(bassFreq, durationMs * 0.9, 'bass');
+        }
+    
         currentNote = (currentNote + 1) % melody.length;
         musicInterval = setTimeout(playNextNote, durationMs);
     }
