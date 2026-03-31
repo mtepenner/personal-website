@@ -34,7 +34,28 @@
         <header>
             <div class="metadata">
                 <span>Vol. CXIV ... No. 82</span>
-                <span id="pub-date">Friday, March 27, 2026</span>
+                
+                <span id="pub-date"></span>
+
+                <script>
+                  // 1. Get the current date
+                  const currentDate = new Date();
+                
+                  // 2. Define the formatting options
+                  const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  };
+                
+                  // 3. Format the date to a string (e.g., "Friday, March 27, 2026")
+                  // You can change 'en-US' to your preferred locale if needed
+                  const formattedDate = currentDate.toLocaleDateString('en-US', options);
+                
+                  // 4. Inject the formatted date into the span
+                  document.getElementById('pub-date').textContent = formattedDate;
+                </script>
                 <span>Hillsboro Edition</span>
             </div>
             <h1>The Daily Herald</h1>
