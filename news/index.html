@@ -11,7 +11,15 @@
         header { text-align: center; border-bottom: 5px double #000; margin-bottom: 20px; }
         header h1 { font-size: 5.5rem; text-transform: uppercase; margin: 10px 0; font-family: 'Georgia', serif; letter-spacing: -2px; }
         .metadata { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.85rem; border-top: 2px solid #000; padding: 5px 0; text-transform: uppercase; }
-        .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; }
+        .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 20px; }
+        
+        /* New Secondary Grid for Stocks, Sports, Weather */
+        .secondary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; border-bottom: 2px solid #000; padding-bottom: 20px; }
+        .sub-section { border-right: 1px solid #ddd; padding-right: 20px; }
+        .sub-section:last-child { border-right: none; padding-right: 0; }
+        .sub-section h3 { font-size: 1.6rem; margin: 10px 0; line-height: 1.1; }
+        .sub-section p { font-size: 0.95rem; line-height: 1.4; }
+
         .section-label { background: #000; color: #fff; padding: 2px 8px; text-transform: uppercase; font-size: 0.75rem; display: inline-block; margin-bottom: 10px; }
         h2 { font-size: 2.8rem; line-height: 0.95; margin: 10px 0; }
         .hero-img { width: 100%; height: 450px; object-fit: cover; filter: grayscale(100%) contrast(1.2); margin-bottom: 20px; border: 1px solid #000; }
@@ -34,26 +42,11 @@
         <header>
             <div class="metadata">
                 <span>Vol. CXIV ... No. 82</span>
-                
                 <span id="pub-date"></span>
-
                 <script>
-                  // 1. Get the current date
                   const currentDate = new Date();
-                
-                  // 2. Define the formatting options
-                  const options = { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  };
-                
-                  // 3. Format the date to a string (e.g., "Friday, March 27, 2026")
-                  // You can change 'en-US' to your preferred locale if needed
+                  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                   const formattedDate = currentDate.toLocaleDateString('en-US', options);
-                
-                  // 4. Inject the formatted date into the span
                   document.getElementById('pub-date').textContent = formattedDate;
                 </script>
                 <span>Hillsboro Edition</span>
@@ -79,6 +72,25 @@
                 </div>
             </aside>
         </div>
+
+        <div class="secondary-grid">
+            <div class="sub-section">
+                <span class="section-label">Financial Markets</span>
+                <h3 id="stocks-headline">Awaiting Bell...</h3>
+                <p id="stocks-content">Connecting to ticker tape...</p>
+            </div>
+            <div class="sub-section">
+                <span class="section-label">Sports</span>
+                <h3 id="sports-headline">Awaiting Scores...</h3>
+                <p id="sports-content">Connecting to the press box...</p>
+            </div>
+            <div class="sub-section">
+                <span class="section-label">Local Weather</span>
+                <h3 id="weather-headline">Awaiting Forecast...</h3>
+                <p id="weather-content">Consulting the almanac...</p>
+            </div>
+        </div>
+
     </div>
 
     <script type="module">
@@ -92,7 +104,6 @@
             
             try {
                 // 1. Initialize Local AI (Llama-3-8B)
-                // Note: First run will download several GBs to browser cache
                 engine = await webllm.CreateMLCEngine("Llama-3-8B-Instruct-q4f16_1-MLC", {
                     initProgressCallback: (report) => {
                         statusEl.innerText = `Loading AI: ${report.text}`;
@@ -106,42 +117,85 @@
             }
         };
 
-        async function runPublication() {
-            // 2. Fetch News via RSS (Using AllOrigins proxy to bypass CORS)
-            const rssUrl = encodeURIComponent("https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml");
-            const res = await fetch(`https://api.allorigins.win/get?url=${rssUrl}`);
+        // Helper function to fetch and parse RSS feeds via AllOrigins
+        async function fetchRSS(url) {
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+            const res = await fetch(proxyUrl);
             const data = await res.json();
-            
             const parser = new DOMParser();
-            const xml = parser.parseFromString(data.contents, "text/xml");
-            const items = Array.from(xml.querySelectorAll("item")).slice(0, 3);
+            return parser.parseFromString(data.contents, "text/xml");
+        }
 
-            // 3. Process the Main Story (Politics)
-            const mainStory = items[0];
+        async function runPublication() {
+            // --- 1. MAIN POLITICS & SIDEBAR (NYT Home) ---
+            statusEl.innerText = "Fetching Front Page news...";
+            const homeXml = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml");
+            const homeItems = Array.from(homeXml.querySelectorAll("item")).slice(0, 4);
+
+            const mainStory = homeItems[0];
             const headline = mainStory.querySelector("title").textContent;
             const snippet = mainStory.querySelector("description").textContent;
 
             document.getElementById('pol-headline').innerText = headline;
             document.getElementById('pol-image').src = `https://loremflickr.com/800/450/${headline.split(' ').pop()},city,vintage`;
 
-            // 4. Local AI Generation (Viola Davis Persona)
             statusEl.innerText = "Viola Davis is writing the lead story...";
-            const prompt = `You are Viola Davis, a Pulitzer Prize-winning journalist. Write a formal, authoritative 100-word news story about: ${headline}. Context: ${snippet}. Start immediately with the story.`;
-            
-            const chunks = await engine.chat.completions.create({
-                messages: [{ role: "user", content: prompt }],
+            const polChunks = await engine.chat.completions.create({
+                messages: [{ role: "user", content: `You are Viola Davis, a Pulitzer Prize-winning journalist. Write a formal, authoritative 100-word news story about: ${headline}. Context: ${snippet}. Start immediately with the story.` }],
                 temperature: 0.7,
             });
-            
-            document.getElementById('pol-content').innerText = chunks.choices[0].message.content;
+            document.getElementById('pol-content').innerText = polChunks.choices[0].message.content;
 
-            // 5. Fill Sidebar
-            const sidebarHtml = items.slice(1).map(item => `
+            const sidebarHtml = homeItems.slice(1).map(item => `
                 <h3>${item.querySelector("title").textContent}</h3>
-                <p style="font-size: 0.9rem;">${item.querySelector("description").textContent}</p>
+                <p style="font-size: 0.9rem;">${item.querySelector("description")?.textContent || "Read more in today's edition."}</p>
                 <hr>
             `).join('');
             document.getElementById('sidebar-stories').innerHTML = sidebarHtml;
+
+            // --- 2. STOCKS (NYT Business) ---
+            statusEl.innerText = "Fetching Financial news...";
+            const bizXml = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Business.xml");
+            const bizHeadline = bizXml.querySelector("item title").textContent;
+            document.getElementById('stocks-headline').innerText = bizHeadline;
+
+            statusEl.innerText = "Analyzing the markets...";
+            const stockChunks = await engine.chat.completions.create({
+                messages: [{ role: "user", content: `You are a stoic Wall Street broker from the 1920s. Write a brief, 50-word market column reacting to this news: ${bizHeadline}. Start immediately.` }],
+                temperature: 0.7,
+            });
+            document.getElementById('stocks-content').innerText = stockChunks.choices[0].message.content;
+
+            // --- 3. SPORTS (NYT Sports) ---
+            statusEl.innerText = "Fetching Sports scores...";
+            const sportsXml = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml");
+            const sportsHeadline = sportsXml.querySelector("item title").textContent;
+            document.getElementById('sports-headline').innerText = sportsHeadline;
+
+            statusEl.innerText = "Reporting from the press box...";
+            const sportChunks = await engine.chat.completions.create({
+                messages: [{ role: "user", content: `You are an energetic, fast-talking 1940s radio sports announcer. Write a brief 50-word column about this sports news: ${sportsHeadline}. Start immediately.` }],
+                temperature: 0.7,
+            });
+            document.getElementById('sports-content').innerText = sportChunks.choices[0].message.content;
+
+            // --- 4. WEATHER (Open-Meteo API - Keyless) ---
+            statusEl.innerText = "Checking the skies...";
+            // Using coordinates for a generic US location (New York) to guarantee a reliable return
+            const weatherRes = await fetch("https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true");
+            const weatherData = await weatherRes.json();
+            const tempC = weatherData.current_weather.temperature;
+            const windSpeed = weatherData.current_weather.windspeed;
+            const tempF = Math.round((tempC * 9/5) + 32); 
+
+            document.getElementById('weather-headline').innerText = `Current Temp: ${tempF}°F`;
+
+            statusEl.innerText = "Consulting the Farmer's Almanac...";
+            const weatherChunks = await engine.chat.completions.create({
+                messages: [{ role: "user", content: `Write a poetic, old-timey Farmer's Almanac 50-word weather forecast for a day that is ${tempF} degrees Fahrenheit with wind speeds of ${windSpeed} km/h. Start immediately.` }],
+                temperature: 0.7,
+            });
+            document.getElementById('weather-content').innerText = weatherChunks.choices[0].message.content;
 
             statusEl.innerText = "Edition Published Successfully.";
         }
