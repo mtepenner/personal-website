@@ -1,4 +1,4 @@
-# Undergraduate Computer Science Portfolio
+# My Personal Online Portfolio and Database
 
 A comprehensive collection of academic and personal projects developed during my Bachelor of Science in Computer Science at Portland State University. This repository demonstrates proficiency in low-level systems programming, concurrent applications, and complex algorithmic implementations.
 
