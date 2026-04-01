@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time ISS Tracker</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: #ffffff;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+            color: #2c3e50;
+            text-align: center;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #a0c4ff;
+            cursor: not-allowed;
+        }
+        .console {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            min-height: 120px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ISS Locator</h1>
+    <button id="trackBtn">Find the ISS</button>
+    <div id="output" class="console">Ready to fetch coordinates...</div>
+</div>
+
+<script>
+    document.getElementById('trackBtn').addEventListener('click', async () => {
+        const outputDiv = document.getElementById('output');
+        const btn = document.getElementById('trackBtn');
+        
+        // Reset UI
+        outputDiv.textContent = "Fetching real-time ISS coordinates...\n";
+        btn.disabled = true;
+
+        try {
+            // 1. Fetch ISS Coordinates
+            // Note: The Open-Notify API uses HTTP. If you host this on an HTTPS server, 
+            // your browser may block it due to "Mixed Content" rules. 
+            // If that happens, consider switching to an HTTPS ISS API like: https://api.wheretheiss.at/v1/satellites/25544
+            const issUrl = "http://api.open-notify.org/iss-now.json";
+            const issResponse = await fetch(issUrl);
+            
+            if (!issResponse.ok) {
+                throw new Error(`Failed to get data from ISS API. Status: ${issResponse.status}`);
+            }
+
+            const issJson = await issResponse.json();
+            
+            if (issJson.message !== "success") {
+                throw new Error("Error in ISS API response.");
+            }
+
+            const latitude = issJson.iss_position.latitude;
+            const longitude = issJson.iss_position.longitude;
+
+            outputDiv.textContent += `ISS is currently at -> Latitude: ${latitude}, Longitude: ${longitude}\n`;
+            outputDiv.textContent += `Determining location on Earth...\n`;
+
+            // 2. Reverse Geocode the Coordinates using OpenStreetMap Nominatim
+            const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`;
+            
+            // Browsers automatically send a User-Agent, so we don't need to manually set one like in libcurl.
+            // We set the Accept-Language so the results default to English if possible.
+            const geoResponse = await fetch(geoUrl, {
+                headers: {
+                    'Accept-Language': 'en-US,en;q=0.9'
+                }
+            });
+
+            if (!geoResponse.ok) {
+                throw new Error(`Failed to get data from Geocoding API. Status: ${geoResponse.status}`);
+            }
+
+            const geoJson = await geoResponse.json();
+
+            // 3. Output the result
+            if (geoJson.error) {
+                outputDiv.textContent += `\nResult: The ISS is currently over an ocean or an unmapped region.\n`;
+            } else if (geoJson.display_name) {
+                outputDiv.textContent += `\nResult: The ISS is currently passing over:\n${geoJson.display_name}\n`;
+            } else {
+                outputDiv.textContent += `\nResult: Location data is unavailable for these coordinates.\n`;
+            }
+
+        } catch (error) {
+            outputDiv.textContent += `\nException: ${error.message}\n`;
+        } finally {
+            // Re-enable the button
+            btn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>
