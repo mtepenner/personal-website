@@ -56,7 +56,7 @@ Developed as part of the University Honors College, this custom web application 
 
 ## 📬 Contact
 * **Email:** [mtepenner@gmail.com](mailto:mtepenner@gmail.com)
-* **LinkedIn:** [matthew-penner-3954321700](https://www.linkedin.com/in/matthew-penner-3954321700)
+* **LinkedIn:** [matthew-penner-3954321700](https://www.linkedin.com/in/matthew-penner-39543217oo)
 
 
 * **Skills:** C, C++, Rust, Python, POSIX Threads, SQL, MongoDB.
