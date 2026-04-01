@@ -78,11 +78,8 @@
         btn.disabled = true;
 
         try {
-            // 1. Fetch ISS Coordinates
-            // Note: The Open-Notify API uses HTTP. If you host this on an HTTPS server, 
-            // your browser may block it due to "Mixed Content" rules. 
-            // If that happens, consider switching to an HTTPS ISS API like: https://api.wheretheiss.at/v1/satellites/25544
-            const issUrl = "http://api.open-notify.org/iss-now.json";
+            // 1. Fetch ISS Coordinates using a CORS-friendly HTTPS API
+            const issUrl = "https://api.wheretheiss.at/v1/satellites/25544";
             const issResponse = await fetch(issUrl);
             
             if (!issResponse.ok) {
@@ -91,12 +88,9 @@
 
             const issJson = await issResponse.json();
             
-            if (issJson.message !== "success") {
-                throw new Error("Error in ISS API response.");
-            }
-
-            const latitude = issJson.iss_position.latitude;
-            const longitude = issJson.iss_position.longitude;
+            // The JSON structure is slightly different for this new API
+            const latitude = issJson.latitude.toFixed(4);
+            const longitude = issJson.longitude.toFixed(4);
 
             outputDiv.textContent += `ISS is currently at -> Latitude: ${latitude}, Longitude: ${longitude}\n`;
             outputDiv.textContent += `Determining location on Earth...\n`;
@@ -104,8 +98,6 @@
             // 2. Reverse Geocode the Coordinates using OpenStreetMap Nominatim
             const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`;
             
-            // Browsers automatically send a User-Agent, so we don't need to manually set one like in libcurl.
-            // We set the Accept-Language so the results default to English if possible.
             const geoResponse = await fetch(geoUrl, {
                 headers: {
                     'Accept-Language': 'en-US,en;q=0.9'
