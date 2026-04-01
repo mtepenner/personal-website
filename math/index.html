@@ -42,6 +42,7 @@
         <button class="tab-btn" onclick="showTab('poly')">📈 Polynomial Roots</button>
         <button class="tab-btn" onclick="showTab('stats')">📊 Statistics Engine</button>
         <button class="tab-btn" onclick="showTab('calc')">∫ Calculus III</button>
+        <button class="tab-btn" onclick="showTab('taxes')">💸 Income Tax Calc</button>
     </div>
 
     <div class="content">
@@ -55,6 +56,7 @@
                 <li><strong>Chemical Equation Balancer:</strong> Brute-force solver for reaction coefficients.</li>
                 <li><strong>Kinematics Auto-Solver:</strong> Calculates missing physical variables automatically.</li>
                 <li><strong>Stats & Calculus:</strong> Mean/variance calculations and 3D vector gradient math.</li>
+                <li><strong>Income Tax Calc:</strong> Progressive marginal tax estimation for North America.</li>
             </ul>
         </div>
 
@@ -156,6 +158,33 @@
             <div class="output" id="calc-out">Ready...</div>
         </div>
 
+        <div id="taxes" class="tool-section">
+            <h2>North American Income Tax Calculator</h2>
+            <p>Estimates progressive federal and regional tax burdens based on simplified 2024/2025 brackets.</p>
+            
+            <div class="form-group">
+                <label>Country:</label>
+                <select id="tax-country" onchange="updateTaxRegions()">
+                    <option value="USA" selected>United States</option>
+                    <option value="CAN">Canada</option>
+                    <option value="MEX">Mexico</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>State / Province / Territory:</label>
+                <select id="tax-region"></select>
+            </div>
+            
+            <div class="form-group">
+                <label>Annual Gross Income (Local Currency):</label>
+                <input type="number" id="tax-income" value="75000" step="1000">
+            </div>
+
+            <button class="action-btn" onclick="calculateTax()">Calculate Tax Burden</button>
+            <div class="output" id="tax-out">Ready...</div>
+        </div>
+
     </div>
 </div>
 
@@ -166,6 +195,114 @@
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         event.currentTarget.classList.add('active');
+    }
+
+    // --- TAX LOGIC ---
+    // Simplified Bracket Structure: [Upper Limit of Bracket, Marginal Rate]
+    // Use Infinity for the highest tax bracket.
+    const taxData = {
+        USA: {
+            currency: "$",
+            federal: [ [11600, 0.10], [47150, 0.12], [100525, 0.22], [191950, 0.24], [243725, 0.32], [609350, 0.35], [Infinity, 0.37] ],
+            regions: {
+                "OR": { name: "Oregon", brackets: [ [4050, 0.0475], [10200, 0.0675], [125000, 0.0875], [Infinity, 0.099] ] },
+                "CA": { name: "California", brackets: [ [10412, 0.01], [24684, 0.02], [38959, 0.04], [Infinity, 0.06] ] }, // Simplified CA
+                "WA": { name: "Washington", brackets: [ [Infinity, 0.0] ] }, // No state income tax
+                "TX": { name: "Texas", brackets: [ [Infinity, 0.0] ] } // No state income tax
+            }
+        },
+        CAN: {
+            currency: "$",
+            federal: [ [55867, 0.15], [111733, 0.205], [173205, 0.26], [246752, 0.29], [Infinity, 0.33] ],
+            regions: {
+                "ON": { name: "Ontario", brackets: [ [51446, 0.0505], [102894, 0.0915], [150000, 0.1116], [220000, 0.1216], [Infinity, 0.1316] ] },
+                "BC": { name: "British Columbia", brackets: [ [47937, 0.0506], [95875, 0.077], [110076, 0.105], [Infinity, 0.1229] ] }
+            }
+        },
+        MEX: {
+            currency: "$",
+            federal: [ [8952, 0.0192], [75984, 0.064], [133536, 0.1088], [155220, 0.16], [185856, 0.1792], [374844, 0.2136], [Infinity, 0.2352] ], // Highly simplified MXN monthly scaled to annual
+            regions: {
+                "CDMX": { name: "Mexico City", brackets: [ [Infinity, 0.0] ] }, // Mexican states typically don't levy individual income taxes on salaries like the US/CAN
+                "JAL": { name: "Jalisco", brackets: [ [Infinity, 0.0] ] }
+            }
+        }
+    };
+
+    function updateTaxRegions() {
+        const country = document.getElementById("tax-country").value;
+        const regionSelect = document.getElementById("tax-region");
+        regionSelect.innerHTML = "";
+        
+        const regions = taxData[country].regions;
+        for (const [code, data] of Object.entries(regions)) {
+            let option = document.createElement("option");
+            option.value = code;
+            option.text = data.name;
+            regionSelect.appendChild(option);
+        }
+    }
+
+    // Initialize default tax regions on load
+    document.addEventListener("DOMContentLoaded", () => {
+        updateTaxRegions();
+        // Default to Oregon if available
+        let regionDrop = document.getElementById("tax-region");
+        for(let i = 0; i < regionDrop.options.length; i++) {
+            if(regionDrop.options[i].value === "OR") {
+                regionDrop.selectedIndex = i;
+                break;
+            }
+        }
+    });
+
+    function calcMarginalTax(income, brackets) {
+        let tax = 0;
+        let previousLimit = 0;
+
+        for (let i = 0; i < brackets.length; i++) {
+            let limit = brackets[i][0];
+            let rate = brackets[i][1];
+
+            if (income > previousLimit) {
+                let taxableAmountInBracket = Math.min(income, limit) - previousLimit;
+                tax += taxableAmountInBracket * rate;
+                previousLimit = limit;
+            } else {
+                break;
+            }
+        }
+        return tax;
+    }
+
+    function calculateTax() {
+        const income = parseFloat(document.getElementById("tax-income").value);
+        const country = document.getElementById("tax-country").value;
+        const regionCode = document.getElementById("tax-region").value;
+        const out = document.getElementById("tax-out");
+
+        if (isNaN(income) || income < 0) {
+            return out.innerText = "Please enter a valid positive income.";
+        }
+
+        const data = taxData[country];
+        const symbol = data.currency;
+
+        const fedTax = calcMarginalTax(income, data.federal);
+        const regTax = calcMarginalTax(income, data.regions[regionCode].brackets);
+        const totalTax = fedTax + regTax;
+        const takeHome = income - totalTax;
+        const effectiveRate = (totalTax / income) * 100;
+
+        out.innerText = `Gross Income: ${symbol}${income.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+-----------------------------------
+Federal Tax:  ${symbol}${fedTax.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+State/Prov:   ${symbol}${regTax.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+-----------------------------------
+Total Tax:    ${symbol}${totalTax.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+Net Pay:      ${symbol}${takeHome.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+
+Effective Tax Rate: ${effectiveRate.toFixed(2)}%`;
     }
 
     // --- CHEMISTRY LOGIC ---
@@ -346,7 +483,6 @@
         let roots = [];
         let r_init = new Complex(0.4, 0.9);
         for (let i = 0; i < degree; ++i) {
-            // Complex exponentiation by integer
             let p = new Complex(1, 0);
             for(let j=0; j<i; j++) p = p.mul(r_init);
             roots.push(p);
@@ -357,7 +493,6 @@
             let nextRoots = roots.map(r => new Complex(r.r, r.i));
 
             for (let i = 0; i < degree; ++i) {
-                // Evaluate P(x)
                 let num = new Complex(0,0);
                 for (let c of coeffs) num = num.mul(roots[i]).add(c);
                 
