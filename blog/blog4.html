@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Full-Stack JavaScript Prototypes | Matthew Penner</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #0056b3;
+            --accent-color: #007bff;
+            --code-bg: #282c34;
+            --code-text: #abb2bf;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.8; }
+
+        nav { background: #333; position: sticky; top: 0; z-index: 1000; padding: 1rem; text-align: center; }
+        nav a { color: white; text-decoration: none; font-weight: bold; margin: 0 1rem; transition: color 0.3s ease; }
+        nav a:hover { color: var(--accent-color); }
+
+        .article-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .article-header { border-bottom: 2px solid #e2e8f0; padding-bottom: 2rem; margin-bottom: 2rem; text-align: center; }
+        .article-header h1 { color: var(--primary-color); font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2; }
+        .article-meta { color: #666; font-size: 0.95rem; font-weight: bold; }
+
+        .article-body h2 { color: var(--primary-color); margin: 2rem 0 1rem 0; font-size: 1.8rem; }
+        .article-body h3 { color: #444; margin: 1.5rem 0 0.5rem 0; font-size: 1.4rem; }
+        .article-body p { margin-bottom: 1.5rem; font-size: 1.1rem; }
+        
+        .article-body ul, .article-body ol { margin-bottom: 1.5rem; padding-left: 2rem; font-size: 1.1rem; }
+        .article-body li { margin-bottom: 0.5rem; }
+
+        /* Code Block Styling */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+        
+        code {
+            background: #e2e8f0;
+            color: #d63384;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+        }
+        
+        pre code { background: transparent; color: inherit; padding: 0; }
+
+        footer { text-align: center; padding: 2rem; background: #333; color: white; margin-top: 4rem; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/blog">&larr; Back to Blog</a>
+        <a href="/">Main Portfolio</a>
+    </nav>
+
+    <main class="article-container">
+        <header class="article-header">
+            <div class="article-meta">Published on April 2, 2026 • Web Development</div>
+            <h1>Building Full-Stack JavaScript Prototypes to Accelerate Learning</h1>
+        </header>
+
+        <div class="article-body">
+            <p><em>Recently, I've embraced a new approach to accelerating my growth as a developer: rapidly building full-stack JavaScript prototype applications. This hands-on practice isn't just about expanding my portfolio; it's a deliberate strategy to deeply understand the architecture that connects the client to the server.</em></p>
+            
+            <h2>Bridging the Gap Between Environments</h2>
+            <p>When you are first learning to code, it is easy to view the frontend and backend as completely isolated silos. However, by continually building out prototypes, I am forcing myself to confront how data flows between the two. Understanding how a button click in React or Vanilla JS translates into a database mutation via Node and Express is where the real learning happens.</p>
+
+            <h3>The Power of a Unified Language</h3>
+            <p>Choosing JavaScript for the entire stack has been incredibly beneficial. It allows for context switching with much less cognitive load. When writing an API endpoint, I can use the same mental models and syntax I use when writing the UI component that consumes it. For example, standardizing API responses makes frontend state management much cleaner.</p>
+
+<pre><code>// Example: A simple Express route returning JSON data
+app.get('/api/projects', async (req, res) => {
+    try {
+        const projects = await Database.fetchPrototypes();
+        res.status(200).json({ success: true, data: projects });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+});</code></pre>
+
+            <h2>Why This Approach Works</h2>
+            <p>I feel more confident than ever that this methodology is the right path forward. Here are the core benefits I've experienced so far:</p>
+
+            <ul>
+                <li><strong>Architectural Intuition:</strong> Repeatedly setting up servers, routing, and UI state helps me naturally understand standard project structures rather than just memorizing them.</li>
+                <li><strong>Portfolio Density:</strong> Instead of having one massive, unfinished project, I am building a diverse collection of functional prototypes that demonstrate tangible skills.</li>
+                <li><strong>Employability:</strong> This approach directly aligns with what businesses need. Showing that I can navigate the entire stack independently proves initiative—a key trait for entry-level professionals.</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+            <p>The more I build, the more the underlying structure of modern web development makes sense. By consistently pushing out full-stack prototypes, I am actively transitioning from understanding code snippets to understanding complete software systems. I am excited to see where this momentum takes my career.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
