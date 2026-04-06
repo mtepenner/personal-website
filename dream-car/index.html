@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Car Designer</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        .container {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        h1 { margin-top: 0; }
+        .form-group { margin-bottom: 1.5rem; }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        button:hover { background-color: #1d4ed8; }
+        button:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        
+        #result-section {
+            margin-top: 2rem;
+            display: none;
+            border-top: 2px solid var(--bg);
+            padding-top: 2rem;
+        }
+        #generated-image {
+            width: 100%;
+            border-radius: 8px;
+            background-color: #e2e8f0;
+            min-height: 300px;
+            object-fit: cover;
+        }
+        .prompt-display {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: #475569;
+            margin-top: 1rem;
+            font-family: monospace;
+        }
+        .loading {
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+            display: none;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Dream Car Generator</h1>
+        <p>Select your specs, and the program will render your custom vehicle.</p>
+
+        <form id="car-form">
+            <div class="form-group">
+                <label for="era">Era / Time Period</label>
+                <select id="era">
+                    <option value="Modern">Modern (Current Year)</option>
+                    <option value="Vintage 1960s">Vintage (1960s)</option>
+                    <option value="Vintage 1980s">Retro (1980s)</option>
+                    <option value="Retro-Futuristic">Retro-Futuristic Cyberpunk</option>
+                    <option value="Futuristic Concept">Far Future Concept</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="passengers">Passenger Count (1-9)</label>
+                <input type="number" id="passengers" min="1" max="9" value="4">
+            </div>
+
+            <div class="form-group">
+                <label for="color">Exterior Color</label>
+                <input type="text" id="color" placeholder="e.g., Matte Black, Cherry Red, Metallic Blue" value="Metallic Emerald Green">
+            </div>
+
+            <div class="form-group">
+                <label for="styling">Exterior Styling</label>
+                <select id="styling">
+                    <option value="Sleek and aerodynamic">Sleek & Aerodynamic</option>
+                    <option value="Aggressive and muscular">Aggressive & Muscular</option>
+                    <option value="Boxy and utilitarian">Boxy & Utilitarian</option>
+                    <option value="Minimalist and elegant">Minimalist & Elegant</option>
+                    <option value="Rugged off-road">Rugged Off-Road</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="drivetrain">Drivetrain</label>
+                <select id="drivetrain">
+                    <option value="AWD (All-Wheel Drive)">AWD (All-Wheel Drive)</option>
+                    <option value="RWD (Rear-Wheel Drive)">RWD (Rear-Wheel Drive)</option>
+                    <option value="FWD (Front-Wheel Drive)">FWD (Front-Wheel Drive)</option>
+                    <option value="4x4 High-Clearance">4x4 High-Clearance</option>
+                </select>
+            </div>
+
+            <button type="submit" id="generate-btn">Show Car</button>
+        </form>
+
+        <div class="loading" id="loading-indicator">Rendering your car... Please wait up to 10 seconds.</div>
+
+        <div id="result-section">
+            <h2>Your Rendering</h2>
+            <img id="generated-image" alt="AI Generated Car will appear here">
+            
+            <h3>Prompt Used:</h3>
+            <div class="prompt-display" id="prompt-display"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('car-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent page reload
+            
+            // UI State updates
+            const btn = document.getElementById('generate-btn');
+            const loading = document.getElementById('loading-indicator');
+            const resultSection = document.getElementById('result-section');
+            const imageEl = document.getElementById('generated-image');
+            const promptDisplay = document.getElementById('prompt-display');
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            resultSection.style.display = 'none';
+
+            // Gather inputs
+            const era = document.getElementById('era').value;
+            const passengers = document.getElementById('passengers').value;
+            const color = document.getElementById('color').value;
+            const styling = document.getElementById('styling').value;
+            const drivetrain = document.getElementById('drivetrain').value;
+
+            // Construct the Prompt
+            const prompt = `A highly detailed, photorealistic 8k commercial automotive photograph of a ${era} car. The exterior is ${color} with ${styling} styling. The cabin is proportioned to comfortably seat ${passengers} passengers. The car has a ${drivetrain} stance and chassis setup. Shot in a professional studio with dramatic cinematic lighting, masterpiece, sharp focus, ray tracing.`;
+
+            // Display the prompt text
+            promptDisplay.textContent = prompt;
+
+            // Use Pollinations.ai (Free, no key required, works directly via URL)
+            // Adding a random seed helps ensure a new image is generated if they click multiple times with the same prompt
+            const randomSeed = Math.floor(Math.random() * 100000);
+            const width = 800;
+            const height = 450;
+            const encodedPrompt = encodeURIComponent(prompt);
+            
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${randomSeed}&nologo=true`;
+
+            // Load the image
+            imageEl.onload = function() {
+                loading.style.display = 'none';
+                resultSection.style.display = 'block';
+                btn.disabled = false;
+            };
+
+            imageEl.onerror = function() {
+                loading.style.display = 'none';
+                alert("There was an error generating the image. The free API might be temporarily busy. Please try again.");
+                btn.disabled = false;
+            };
+
+            // Setting the src triggers the API call
+            imageEl.src = imageUrl;
+        });
+    </script>
+</body>
+</html>
