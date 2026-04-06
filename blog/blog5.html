@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building for the Breakthrough: The Entry-Level Hustle | Matthew Penner</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #0056b3;
+            --accent-color: #007bff;
+            --code-bg: #282c34;
+            --code-text: #abb2bf;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.8; }
+
+        nav { background: #333; position: sticky; top: 0; z-index: 1000; padding: 1rem; text-align: center; }
+        nav a { color: white; text-decoration: none; font-weight: bold; margin: 0 1rem; transition: color 0.3s ease; }
+        nav a:hover { color: var(--accent-color); }
+
+        .article-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .article-header { border-bottom: 2px solid #e2e8f0; padding-bottom: 2rem; margin-bottom: 2rem; text-align: center; }
+        .article-header h1 { color: var(--primary-color); font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2; }
+        .article-meta { color: #666; font-size: 0.95rem; font-weight: bold; }
+
+        .article-body h2 { color: var(--primary-color); margin: 2rem 0 1rem 0; font-size: 1.8rem; }
+        .article-body h3 { color: #444; margin: 1.5rem 0 0.5rem 0; font-size: 1.4rem; }
+        .article-body p { margin-bottom: 1.5rem; font-size: 1.1rem; }
+        
+        .article-body ul, .article-body ol { margin-bottom: 1.5rem; padding-left: 2rem; font-size: 1.1rem; }
+        .article-body li { margin-bottom: 0.5rem; }
+
+        /* Code Block Styling */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+        
+        code {
+            background: #e2e8f0;
+            color: #d63384;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+        }
+        
+        pre code { background: transparent; color: inherit; padding: 0; }
+
+        footer { text-align: center; padding: 2rem; background: #333; color: white; margin-top: 4rem; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/blog">&larr; Back to Blog</a>
+        <a href="/">Main Portfolio</a>
+    </nav>
+
+    <main class="article-container">
+        <header class="article-header">
+            <div class="article-meta">Published on April 6, 2026 • Career Journey</div>
+            <h1>Building for the Breakthrough: Navigating the Entry-Level Job Hunt</h1>
+        </header>
+
+        <div class="article-body">
+            <p><em>Searching for an entry-level software engineering role often feels like a full-time job in itself. To break through the noise of a highly competitive market, I've realized that passively applying isn't enough. The key to standing out lies in active creation.</em></p>
+            
+            <h2>Saturating the Portfolio</h2>
+            <p>While navigating the job hunt, my primary strategy has been to build complex, full-stack applications. Tech companies don't just want to hear about what you know; they want to see what you can build. By continuously pushing code, I am transforming my GitHub repositories from a simple storage space into a rich, saturated portfolio that proves my capabilities.</p>
+
+            <h3>Why Full-Stack Matters</h3>
+            <p>Focusing on the full stack allows me to demonstrate a holistic understanding of product development—from spinning up a database to designing a responsive user interface. For instance, creating modular code using modern tools like <code>React</code> and <code>Node.js</code> helps bridge the gap between theoretical knowledge and practical engineering.</p>
+
+<pre><code>// Example: Structuring a clean API response
+app.get('/api/projects', async (req, res) => {
+    try {
+        const projects = await db.fetchPortfolioProjects();
+        return res.status(200).json({ success: true, data: projects });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Server Error' });
+    }
+});</code></pre>
+
+            <h2>Practicing the Frameworks</h2>
+            <p>It is critical to maintain momentum. I strongly believe that consistent, daily practice with industry-standard frameworks will directly impact my chances of securing that first major role. Here is what my focus currently looks like:</p>
+
+            <ul>
+                <li><strong>Frontend Polish:</strong> Ensuring intuitive UI/UX design while managing complex state.</li>
+                <li><strong>Backend Architecture:</strong> Designing scalable APIs and optimizing database queries.</li>
+                <li><strong>Deployment & CI/CD:</strong> Getting comfortable with cloud providers and automated testing pipelines to ensure my apps are production-ready.</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+            <p>The journey to landing an entry-level software engineering position is a marathon, not a sprint. By dedicating my time to building robust applications and deeply understanding modern frameworks, I am not just preparing for technical interviews—I am laying the groundwork to kick-start a long and successful career in the tech industry.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
