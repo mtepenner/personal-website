@@ -181,6 +181,43 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Dropdown Container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+        
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #444;
+            color: var(--accent-color);
+        }
+        
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -195,43 +232,46 @@
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#portfolio">Portfolio</a></li>
-            <li><a href="/games">Games</a></li> 
-            <li><a href="/news">News</a></li> 
-            <li><a href="/math">Calculator</a></li> 
-            <li><a href="/iss">ISS</a></li> 
-            <li><a href="/oil-yields">Oil Conversions</a></li> 
-            <li><a href="/dream-car">Car Designer</a></li> 
-            <li><a href="/blog">Blog</a></li> 
+            <li class="dropdown">
+                <a href="#apps" class="dropbtn">Web Apps ▼</a>
+                <div class="dropdown-content">
+                    <a href="/games">Games</a>
+                    <a href="/news">News</a>
+                    <a href="/math">Calculator</a>
+                    <a href="/iss">ISS Tracker</a>
+                    <a href="/oil-yields">Oil Conversions</a>
+                    <a href="/dream-car">Car Designer</a>
+                </div>
+            </li>
+            <li><a href="/blog">Blog</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <section id="about">
+       <section id="about">
             <h2>About Me</h2>
             <div class="about-grid">
                 <div class="card">
                     <h3>Profile</h3>
-                    <p>I am an aspiring software engineer with a Bachelor of Science in Computer Science (Honors) and a deep passion for building robust, scalable systems. My technical foundation spans a wide array of disciplines, from low-level systems programming to full-stack web development. I thrive on tackling complex engineering challenges, architecting elegant solutions, and continuously expanding my technical toolkit.</p>
-                    <br>
-                    <p>Drawing on nearly three years of technical experience at a major multinational hardware corporation, I have developed a meticulous, detail-oriented approach to problem-solving, inventory management systems, and hardware-software integration. I am highly proficient in modern languages and frameworks, including Python, Rust, React, Node.js, and Express. This versatile skill set allows me to seamlessly transition between optimizing backend infrastructure, writing safe and concurrent systems code, and delivering dynamic, user-focused frontend experiences.</p>
-                    <br>
-                    <p>Beyond traditional full-stack development, I am deeply fascinated by the intersection of software, spatial computing, and physical systems. I have a strong interest in motion capture technologies, specifically OptiTrack, and its applications within Unreal Engine and robotics. Whether I am exploring AI-forward engineering paradigms, architecting scalable web applications, or experimenting with real-time 3D environments, I am committed to continuous learning and driving innovative projects from conception to deployment.</p>
-                </div>
+                    <p>I am an aspiring software engineer with a Bachelor of Science in Computer Science (Honors)...</p>
+                    </div>
                 <div class="card">
                     <h3>Education</h3>
                     <p><strong>Portland State University</strong></p>
                     <p>Bachelor of Science, Computer Science</p>
                     <p><em>University Honors College</em></p>
-                    <h4>Senior Thesis</h4>
-                
-                    <div class="portfolio-card">
-                        <h4>Experience from a Distance: Improving Transparency for the Multnomah Athletic Club</h4>
-                        <h5>Abstract</h5>
-                        <p>Portland is home to the largest and one of the most prestigious athletic clubs in the world: Multnomah Athletic Club. In many ways, it is the pinnacle of luxury and innovation, and over time, it finds any way to entice prospective members to pay the expensive upfront fee of $6000 and monthly membership fees exceeding $300. Due to the previous technological barrier, which was not being able to see the full extent of what amenities the club had to offer, the club faced major challenges in recruitment and marketing. Over two academic terms, a team of six computer science capstone students, including myself, from Portland State University, undertook a project to close the space that was a complication for the club. This essay will detail the process we undertook to develop a comprehensive, interactive virtual tour for the MAC. Many of the elements included creating a custom web application that integrates 360-degree photography, a third-party tour platform, and a dynamic, interactive mapping system to provide an immersive, intuitive, and informative experience. In this writeup of my experiences along with the rest of my team, I will detail the initial project motivations, the technical architecture, the collaborative development process, the unexpected challenges encountered, and the crucial lessons learned in delivering a software solution that aligned both the academic requirements my team had to meet and the sponsor's professional vision of how it would help shape the future of the club.</p>
-                        <a href="https://pdxscholar.library.pdx.edu/cgi/viewcontent.cgi?article=3030&context=honorstheses" target="_blank" class="demo-link">View Thesis</a>
-                    </div>
                 </div>
+            </div>
+        </section>
+        
+        <section id="featured-work">
+            <h2>Featured Work: Senior Thesis</h2>
+            <div class="card">
+                <h3>Experience from a Distance: Improving Transparency for the Multnomah Athletic Club</h3>
+                <p><strong>Abstract:</strong> Portland is home to the largest and one of the most prestigious athletic clubs in the world: Multnomah Athletic Club... </p>
+                <br>
+                <a href="https://pdxscholar.library.pdx.edu/cgi/viewcontent.cgi?article=3030&context=honorstheses" target="_blank" class="github-link">View Thesis</a>
             </div>
         </section>
 
