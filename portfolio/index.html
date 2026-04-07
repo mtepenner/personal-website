@@ -1,1 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matthew Penner | Portfolio</title>
+    <style>
+        /* Core Variables and Setup */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #0056b3;
+            --secondary-color: #e2e8f0;
+            --accent-color: #007bff;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Typography */
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Portfolio Grid System */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .portfolio-card {
+            background: white;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .portfolio-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .portfolio-card .tech-stack {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: white;
+            background: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .github-link:hover {
+            background: var(--accent-color);
+        }
+
+        /* Simple Back Button Style */
+        .back-nav {
+            margin-bottom: 2rem;
+        }
+        
+        .back-nav a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .back-nav a:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="back-nav">
+            <a href="index.html">← Back to Main Profile</a>
+        </div>
+
+        <section id="portfolio">
+            <h2>Undergraduate Portfolio Highlights</h2>
+            <p style="margin-bottom: 2rem;">A selection of projects from my GitHub repository demonstrating systems programming, data structures, and application development.</p>
+            
+            <h3 style="margin: 2rem 0 1rem 0; color: #555; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Systems Programming & Architecture</h3>
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <h3>Client-Server Communication</h3>
+                    <div class="tech-stack">C</div>
+                    <p>Developed a robust client-server architecture demonstrating low-level socket programming and networked data transmission.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS333/client-server" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Stat and WC Utilities</h3>
+                    <div class="tech-stack">C</div>
+                    <p>Recreated the functionality of standard Unix utilities `stat` and `wc`, interfacing directly with operating system file metadata and I/O streams.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS333/stat-and-wc" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Thread Encryption</h3>
+                    <div class="tech-stack">C / pthreads</div>
+                    <p>Programmed a multithreaded file encryption tool using POSIX threads to achieve parallel processing and concurrent workload management.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS333/thread-encryption" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>ATC Simulator</h3>
+                    <div class="tech-stack">Rust</div>
+                    <p>Built an Air Traffic Control (ATC) simulator applying Rust's strict memory safety rules, concurrency models, and ownership paradigms.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS423/atc-simulator" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Rule 110 Cellular Automaton</h3>
+                    <div class="tech-stack">Rust</div>
+                    <p>Programmed an implementation of the Rule 110 cellular automaton, highlighting functional programming concepts and efficient state computation.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS423/rule110_automaton" target="_blank" class="github-link">View Repository</a>
+                </div>
+            </div>
+
+            <h3 style="margin: 3rem 0 1rem 0; color: #555; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Compilers, Interpreters & Applications</h3>
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <h3>ES Interpreter</h3>
+                    <div class="tech-stack">Python</div>
+                    <p>Constructed an interpreter for a custom expression syntax to evaluate statements and manage variable environments dynamically.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/es-interpreter" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>ImpLang Interpreter</h3>
+                    <div class="tech-stack">Python</div>
+                    <p>Developed an interpreter for "ImpLang", an imperative toy language, parsing control flows, loops, and mathematical logic.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/implang" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Lark Parser</h3>
+                    <div class="tech-stack">Python</div>
+                    <p>Utilized the Lark parsing toolkit to build grammar rules, tokenizers, and Abstract Syntax Trees (AST) for structured text evaluation.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/lark-parser" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>ToyLang Interpreter</h3>
+                    <div class="tech-stack">Python</div>
+                    <p>Built a comprehensive interpreter for "ToyLang", evaluating custom scripts from source code down to execution.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/toylang" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>CS410P Typescript Project</h3>
+                    <div class="tech-stack">TypeScript</div>
+                    <p>Engineered an application utilizing TypeScript for strict typing, interface design, and modern web application structures.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS410P" target="_blank" class="github-link">View Repository</a>
+                </div>
+            </div>
+
+            <h3 style="margin: 3rem 0 1rem 0; color: #555; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Data Structures & Algorithms</h3>
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <h3>Binary Search Trees</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Implemented a Binary Search Tree (BST) to manage and navigate hierarchical data with efficient insertion, deletion, and retrieval operations.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/binary-search-trees" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Graphs</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Developed a graph data structure utilizing adjacency lists for modeling networks, implementing traversal and pathfinding algorithms.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/graphs" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Hash Tables</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Created a custom Hash Table featuring collision resolution techniques to provide constant-time average complexity for lookups and data storage.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/hash-tables" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Stacks and Queues</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Built foundational stack (LIFO) and queue (FIFO) data structures from scratch to handle linear data processing and sequential tasks.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/stacks-and-queues" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Hierarchy Data Structures</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Designed advanced hierarchical data models utilizing object-oriented programming principles like inheritance and polymorphism.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS302/hierarchies" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>Templates & Doubly Linked Lists</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Utilized C++ templates to create generic, reusable Doubly Linked List (DLL) structures capable of handling multiple data types.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS302/templates" target="_blank" class="github-link">View Repository</a>
+                </div>
+                
+                <div class="portfolio-card">
+                    <h3>2-3 Trees</h3>
+                    <div class="tech-stack">C++</div>
+                    <p>Implemented a self-balancing 2-3 Tree to maintain sorted data and guarantee logarithmic time complexity for search operations.</p>
+                    <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS302/two-three-trees" target="_blank" class="github-link">View Repository</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
