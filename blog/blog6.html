@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Beauty of Bash: Automating the Boring Stuff | Matthew Penner</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #0056b3;
+            --accent-color: #007bff;
+            --code-bg: #282c34;
+            --code-text: #abb2bf;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.8; }
+
+        nav { background: #333; position: sticky; top: 0; z-index: 1000; padding: 1rem; text-align: center; }
+        nav a { color: white; text-decoration: none; font-weight: bold; margin: 0 1rem; transition: color 0.3s ease; }
+        nav a:hover { color: var(--accent-color); }
+
+        .article-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .article-header { border-bottom: 2px solid #e2e8f0; padding-bottom: 2rem; margin-bottom: 2rem; text-align: center; }
+        .article-header h1 { color: var(--primary-color); font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2; }
+        .article-meta { color: #666; font-size: 0.95rem; font-weight: bold; }
+
+        .article-body h2 { color: var(--primary-color); margin: 2rem 0 1rem 0; font-size: 1.8rem; }
+        .article-body h3 { color: #444; margin: 1.5rem 0 0.5rem 0; font-size: 1.4rem; }
+        .article-body p { margin-bottom: 1.5rem; font-size: 1.1rem; }
+        
+        .article-body ul, .article-body ol { margin-bottom: 1.5rem; padding-left: 2rem; font-size: 1.1rem; }
+        .article-body li { margin-bottom: 0.5rem; }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+        
+        code {
+            background: #e2e8f0;
+            color: #d63384;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+        }
+        
+        pre code { background: transparent; color: inherit; padding: 0; }
+
+        footer { text-align: center; padding: 2rem; background: #333; color: white; margin-top: 4rem; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/blog">&larr; Back to Blog</a>
+        <a href="/">Main Portfolio</a>
+    </nav>
+
+    <main class="article-container">
+        <header class="article-header">
+            <div class="article-meta">Published on April 9, 2026 • Automation</div>
+            <h1>The Beauty of Bash: Automating the Boring Stuff</h1>
+        </header>
+
+        <div class="article-body">
+            <p><em>In the world of development, efficiency is king. Lately, I’ve been diving deep into Bash scripting—a tool that has transformed my workflow from a series of manual headaches into a streamlined, automated engine. There is a certain kind of beauty in writing a few lines of code and never having to think about a repetitive task again.</em></p>
+            
+            <h2>Why Bash Scripting?</h2>
+            <p>Bash isn't just a shell; it's a powerful language for orchestrating your environment. I started experimenting with scripts for fun, but I quickly realized how much cognitive load they remove. Instead of remembering complex flag combinations for <code>rsync</code> or manually cleaning up build directories, I can encapsulate that logic into a single command.</p>
+
+            <h3>The Scripting Mindset</h3>
+            <p>The goal is simple: if you have to do it more than twice, automate it. Whether it's setting up a local development environment or managing system logs, Bash provides the "glue" that holds different tools together. For example, a simple <code>backup.sh</code> can handle everything from file compression to remote uploads.</p>
+
+<pre><code>#!/bin/bash
+# A simple backup script example
+SOURCE="/path/to/data"
+DEST="/path/to/backup/$(date +%Y-%m-%d)"
+
+echo "Starting backup of $SOURCE..."
+mkdir -p "$DEST"
+cp -r "$SOURCE" "$DEST"
+
+if [ $? -eq 0 ]; then
+    echo "Backup successful!"
+else
+    echo "Backup failed."
+fi</code></pre>
+
+            <h2>Key Advantages of Automation</h2>
+            <p>Moving toward an "automation-first" mindset has provided several key benefits to my daily productivity:</p>
+
+            <ul>
+                <li><strong>Consistency:</strong> Scripts don't get tired or skip steps; they perform the exact same way every time.</li>
+                <li><strong>Speed:</strong> Tasks that take minutes to type out manually are executed in milliseconds.</li>
+                <li><strong>Focus:</strong> By automating the "boring stuff," I can spend my mental energy on complex problem solving rather than syntax and file paths.</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+            <p>Bash scripting is more than just a utility—it's an essential skill for any developer looking to master their machine. What started as an experiment has become a cornerstone of my workflow. As I continue to build more complex scripts, I look forward to seeing just how much more "beautiful" and efficient my development process can become.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
