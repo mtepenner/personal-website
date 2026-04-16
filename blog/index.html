@@ -4,46 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matthew Penner | Blog</title>
+    <link rel="icon" type="image/jpeg" href="/professionalphoto.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --primary-color: #0056b3;
-            --secondary-color: #e2e8f0;
-            --accent-color: #007bff;
+            --bg-color: #080810;
+            --bg-secondary: #0d0d1a;
+            --card-bg: #0f0f20;
+            --card-border: #1a1a35;
+            --text-color: #c8d6e5;
+            --text-bright: #ffffff;
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2fff;
+            --accent-color: #ff2d78;
+            --green-neon: #00ff88;
+            --glow-cyan: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4);
+            --glow-purple: 0 0 10px #7b2fff, 0 0 20px rgba(123,47,255,0.4);
+            --glow-green: 0 0 10px #00ff88, 0 0 20px rgba(0,255,136,0.3);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            font-size: 1.05rem;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
 
-        nav { background: #333; position: sticky; top: 0; z-index: 1000; padding: 1rem; text-align: center; }
-        nav a { color: white; text-decoration: none; font-weight: bold; margin: 0 1rem; transition: color 0.3s ease; }
-        nav a:hover { color: var(--accent-color); }
+        /* ── BACK NAV ────────────────────────────────── */
+        .back-nav {
+            background: rgba(8,8,16,0.95);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            padding: 0.85rem 2rem;
+        }
 
-        header { background-color: var(--primary-color); color: white; padding: 4rem 2rem; text-align: center; }
-        header h1 { font-size: 3rem; margin-bottom: 0.5rem; }
-        header p { font-size: 1.2rem; font-weight: 300; }
+        .back-nav a {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+        }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
-        
-        /* Blog Grid Styling */
+        .back-nav a:hover {
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+        }
+
+        /* ── HEADER ─────────────────────────────────── */
+        header {
+            position: relative;
+            background: linear-gradient(135deg, #080810 0%, #0d0028 50%, #000d1a 100%);
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+            overflow: hidden;
+            border-bottom: 2px solid var(--primary-color);
+            box-shadow: 0 4px 30px rgba(0,212,255,0.15);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 50%, rgba(123,47,255,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 50%, rgba(0,212,255,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        header p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            color: var(--secondary-color);
+            letter-spacing: 0.1em;
+            text-shadow: var(--glow-purple);
+            position: relative;
+            font-style: italic;
+        }
+
+        /* ── CONTAINER ───────────────────────────────── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        /* ── BLOG GRID ───────────────────────────────── */
         .blog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .blog-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--primary-color);
+            border-radius: 2px 8px 8px 2px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.25s ease, border-left-color 0.25s ease, box-shadow 0.25s ease;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -51,41 +134,94 @@
 
         .blog-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border-left-color: var(--secondary-color);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 15px rgba(123,47,255,0.15);
         }
 
-        .blog-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
-        .blog-meta { font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; font-weight: bold; }
-        .blog-title { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1rem; text-decoration: none; }
-        .blog-title:hover { color: var(--accent-color); text-decoration: underline; }
-        .blog-excerpt { font-size: 0.95rem; color: #555; margin-bottom: 1.5rem; flex-grow: 1; }
-        
+        .blog-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-meta {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.04em;
+        }
+
+        .blog-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+            margin-bottom: 0.85rem;
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            display: block;
+        }
+
+        .blog-title:hover {
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+        }
+
+        .blog-excerpt {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
         .read-more {
             display: inline-block;
             text-decoration: none;
-            color: white;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            color: var(--bg-color);
             background: var(--primary-color);
-            padding: 0.6rem 1.2rem;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-            transition: background 0.3s;
+            padding: 0.45rem 1rem;
+            border-radius: 3px;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 8px rgba(0,212,255,0.3);
+            align-self: flex-start;
             margin-top: auto;
         }
-        .read-more:hover { background: var(--accent-color); }
 
-        footer { text-align: center; padding: 2rem; background: #333; color: white; margin-top: 4rem; }
+        .read-more:hover {
+            background: var(--secondary-color);
+            box-shadow: var(--glow-purple);
+            transform: translateY(-2px);
+        }
+
+        /* ── FOOTER ──────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(0,212,255,0.2);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: #555;
+            letter-spacing: 0.08em;
+            margin-top: 3rem;
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="/">&larr; Back to Main Portfolio</a>
-    </nav>
+    <div class="back-nav">
+        <a href="https://matthewpenner.com/">&larr; Back to Main Profile</a>
+    </div>
 
     <header>
         <h1>The MATTBlog</h1>
-        <h3><i>Mastering Advanced Tech & Theory</i></h3>
+        <p>Mastering Advanced Tech &amp; Theory</p>
     </header>
 
     <div class="container">

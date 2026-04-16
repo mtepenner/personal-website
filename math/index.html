@@ -3,34 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Multi-Tool</title>
+    <title>Matthew Penner | Math Multi-Tool</title>
+    <link rel="icon" type="image/jpeg" href="/professionalphoto.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; --text: #333; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
-        header { background-color: var(--primary); color: white; padding: 20px; text-align: center; }
-        .container { display: flex; max-width: 1200px; margin: 20px auto; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; }
-        .sidebar { width: 250px; background: #ecf0f1; padding: 20px 0; border-right: 1px solid #ddd; }
-        .sidebar button { display: block; width: 100%; padding: 15px 20px; text-align: left; background: none; border: none; font-size: 16px; cursor: pointer; transition: 0.2s; }
-        .sidebar button:hover, .sidebar button.active { background: var(--secondary); color: white; }
-        .content { flex: 1; padding: 30px; overflow-y: auto; max-height: 800px; }
+        :root {
+            --bg-color: #080810;
+            --bg-secondary: #0d0d1a;
+            --card-bg: #0f0f20;
+            --card-border: #1a1a35;
+            --text-color: #c8d6e5;
+            --text-bright: #ffffff;
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2fff;
+            --green-neon: #00ff88;
+            --glow-cyan: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4);
+            --glow-purple: 0 0 10px #7b2fff, 0 0 20px rgba(123,47,255,0.4);
+            --glow-green: 0 0 10px #00ff88, 0 0 20px rgba(0,255,136,0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1.05rem;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* ── BACK NAV ────────────────────────────────── */
+        .back-nav {
+            background: rgba(8,8,16,0.95);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            padding: 0.85rem 2rem;
+        }
+
+        .back-nav a {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+        }
+
+        .back-nav a:hover {
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+        }
+
+        /* ── HEADER ─────────────────────────────────── */
+        header {
+            position: relative;
+            background: linear-gradient(135deg, #080810 0%, #0d0028 50%, #000d1a 100%);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            overflow: hidden;
+            border-bottom: 2px solid var(--primary-color);
+            box-shadow: 0 4px 30px rgba(0,212,255,0.15);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 50%, rgba(123,47,255,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 50%, rgba(0,212,255,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+            margin-bottom: 0.3rem;
+            position: relative;
+        }
+
+        header p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            letter-spacing: 0.12em;
+            text-shadow: var(--glow-purple);
+            position: relative;
+        }
+
+        header p::before { content: '> '; color: var(--green-neon); }
+
+        /* ── LAYOUT ──────────────────────────────────── */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        /* ── SIDEBAR ─────────────────────────────────── */
+        .sidebar {
+            width: 240px;
+            background: var(--bg-secondary);
+            padding: 1.25rem 0;
+            border-right: 1px solid rgba(0,212,255,0.15);
+            flex-shrink: 0;
+        }
+
+        .sidebar button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            text-align: left;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--text-color);
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sidebar button:hover {
+            background: rgba(0,212,255,0.06);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+        .sidebar button.active {
+            background: rgba(0,212,255,0.08);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+        }
+
+        /* ── CONTENT ─────────────────────────────────── */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: 800px;
+        }
+
         .tool-section { display: none; }
         .tool-section.active { display: block; }
-        h2 { border-bottom: 2px solid var(--secondary); padding-bottom: 10px; margin-top: 0; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button.action-btn { background: var(--secondary); color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        button.action-btn:hover { background: #2980b9; }
-        .output { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; margin-top: 20px; font-family: monospace; white-space: pre-wrap; min-height: 50px; }
-        .diagram-placeholder { background: #e0e0e0; border: 1px dashed #999; padding: 20px; text-align: center; margin-bottom: 20px; color: #666; font-style: italic;}
+
+        h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.6rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), transparent);
+        }
+
+        p { margin-bottom: 1rem; font-size: 0.95rem; }
+        ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+        li { margin-bottom: 0.3rem; }
+        strong { color: var(--text-bright); }
+
+        .form-group { margin-bottom: 1rem; }
+
+        label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--secondary-color);
+            letter-spacing: 0.04em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.6rem 0.85rem;
+            background: rgba(0,212,255,0.04);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 3px;
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.88rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0,212,255,0.1);
+        }
+
+        select option { background: var(--card-bg); color: var(--text-color); }
+
+        button.action-btn {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 0.55rem 1.4rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.06em;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 0.75rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 8px rgba(0,212,255,0.3);
+        }
+
+        button.action-btn:hover {
+            background: var(--green-neon);
+            box-shadow: var(--glow-green);
+            transform: translateY(-2px);
+        }
+
+        .output {
+            background: #050508;
+            border: 1px solid rgba(0,212,255,0.15);
+            color: var(--text-color);
+            padding: 1rem 1.25rem;
+            border-radius: 4px;
+            margin-top: 1.25rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            min-height: 50px;
+            line-height: 1.7;
+        }
+
+        .diagram-placeholder {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Math Multi-Tool</h1>
-    <p>A JavaScript port of C++ analytical tools</p>
-</header>
+    <div class="back-nav">
+        <a href="https://matthewpenner.com/">&larr; Back to Main Profile</a>
+    </div>
+
+    <header>
+        <h1>Math Multi-Tool</h1>
+        <p>A JavaScript port of C++ analytical tools</p>
+    </header>
 
 <div class="container">
     <div class="sidebar">

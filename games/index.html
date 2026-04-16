@@ -4,111 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matthew Penner | Web Games</title>
+    <link rel="icon" type="image/jpeg" href="/professionalphoto.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Kept your core colors, but adapted for a dark "gaming" theme */
-            --bg-color: #121212;
-            --text-color: #f4f7f6;
-            --card-bg: #1e1e24;
-            --primary-color: #0056b3;
-            --accent-color: #007bff;
-            --hover-color: #33333e;
+            --bg-color: #080810;
+            --bg-secondary: #0d0d1a;
+            --card-bg: #0f0f20;
+            --card-border: #1a1a35;
+            --text-color: #c8d6e5;
+            --text-bright: #ffffff;
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2fff;
+            --accent-color: #ff2d78;
+            --green-neon: #00ff88;
+            --glow-cyan: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4);
+            --glow-purple: 0 0 10px #7b2fff, 0 0 20px rgba(123,47,255,0.4);
+            --glow-green: 0 0 10px #00ff88, 0 0 20px rgba(0,255,136,0.3);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            font-size: 1.05rem;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        /* Simplified Nav to get back to the main site */
-        nav {
-            background: #000;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* ── BACK NAV ────────────────────────────────── */
+        .back-nav {
+            background: rgba(8,8,16,0.95);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            padding: 0.85rem 2rem;
         }
 
-        nav a {
-            color: white;
+        .back-nav a {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary-color);
             text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
         }
 
-        nav a:hover {
-            color: var(--accent-color);
+        .back-nav a:hover {
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
         }
 
-        .nav-brand {
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-
+        /* ── HEADER ─────────────────────────────────── */
         header {
+            position: relative;
+            background: linear-gradient(135deg, #080810 0%, #0d0028 50%, #000d1a 100%);
+            padding: 4rem 2rem 3rem;
             text-align: center;
-            padding: 4rem 2rem 2rem;
+            overflow: hidden;
+            border-bottom: 2px solid var(--primary-color);
+            box-shadow: 0 4px 30px rgba(0,212,255,0.15);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 50%, rgba(123,47,255,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 50%, rgba(0,212,255,0.12) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         header h1 {
-            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
             margin-bottom: 0.5rem;
-            color: var(--accent-color);
+            position: relative;
         }
 
         header p {
-            font-size: 1.2rem;
-            color: #aaa;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            color: var(--secondary-color);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-shadow: var(--glow-purple);
+            position: relative;
         }
 
+        header p::before {
+            content: '> ';
+            color: var(--green-neon);
+        }
+
+        /* ── CONTAINER ───────────────────────────────── */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
         }
 
-        /* Game Dashboard Grid */
+        /* ── GAME GRID ───────────────────────────────── */
         .game-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .game-card {
             background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--primary-color);
+            border-radius: 2px 8px 8px 2px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.25s ease, border-left-color 0.25s ease, box-shadow 0.25s ease;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .game-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,123,255,0.2);
-            background: var(--hover-color);
+            transform: translateY(-5px);
+            border-left-color: var(--secondary-color);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 15px rgba(123,47,255,0.15);
         }
 
-        /* Placeholder for game thumbnails */
+        /* ── GAME THUMBNAIL ──────────────────────────── */
         .game-thumbnail {
             width: 100%;
-            height: 180px;
-            background: #2a2a35;
+            height: 160px;
+            background: rgba(0,212,255,0.04);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #555;
             font-size: 3rem;
-            border-bottom: 3px solid var(--primary-color);
+            border-bottom: 1px solid rgba(0,212,255,0.15);
         }
 
         .game-info {
@@ -119,71 +163,91 @@
         }
 
         .game-info h3 {
-            font-size: 1.5rem;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
             margin-bottom: 0.5rem;
         }
 
         .tech-stack {
-            font-size: 0.85rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-            font-weight: bold;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.85rem;
+            letter-spacing: 0.04em;
         }
 
         .game-info p {
             font-size: 0.95rem;
-            color: #ccc;
-            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1.25rem;
             flex-grow: 1;
         }
 
+        /* ── BUTTON GROUP ────────────────────────────── */
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 0.6rem;
         }
 
         .btn {
             flex: 1;
             text-align: center;
             text-decoration: none;
-            color: white;
-            padding: 0.6rem;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background 0.3s ease;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            padding: 0.5rem 0.8rem;
+            border-radius: 3px;
+            transition: all 0.25s ease;
         }
 
         .btn-play {
-            background: var(--accent-color);
+            color: var(--bg-color);
+            background: var(--primary-color);
+            box-shadow: 0 0 8px rgba(0,212,255,0.3);
         }
 
         .btn-play:hover {
-            background: #0056b3;
+            background: var(--green-neon);
+            box-shadow: var(--glow-green);
+            transform: translateY(-2px);
         }
 
         .btn-code {
-            background: #444;
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+            background: rgba(123,47,255,0.05);
         }
 
         .btn-code:hover {
-            background: #666;
+            background: rgba(123,47,255,0.15);
+            box-shadow: var(--glow-purple);
+            transform: translateY(-2px);
         }
 
+        /* ── FOOTER ──────────────────────────────────── */
         footer {
             text-align: center;
             padding: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid #333;
-            color: #777;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(0,212,255,0.2);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: #555;
+            letter-spacing: 0.08em;
+            margin-top: 3rem;
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="/" class="nav-brand">&larr; Back to Main Portfolio</a>
-        <a href="https://github.com/mtepenner" target="_blank">GitHub</a>
-    </nav>
+    <div class="back-nav">
+        <a href="https://matthewpenner.com/">&larr; Back to Main Profile</a>
+    </div>
 
     <header>
         <h1>Webgames Collection</h1>
