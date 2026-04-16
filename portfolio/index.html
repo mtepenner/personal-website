@@ -4,45 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matthew Penner | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Core Variables and Setup */
         :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --primary-color: #0056b3;
-            --secondary-color: #e2e8f0;
-            --accent-color: #007bff;
+            --bg-color: #080810;
+            --bg-secondary: #0d0d1a;
+            --card-bg: #0f0f20;
+            --card-border: #1a1a35;
+            --text-color: #c8d6e5;
+            --text-bright: #ffffff;
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2fff;
+            --accent-color: #ff2d78;
+            --green-neon: #00ff88;
+            --glow-cyan: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4);
+            --glow-purple: 0 0 10px #7b2fff, 0 0 20px rgba(123,47,255,0.4);
+            --glow-green: 0 0 10px #00ff88, 0 0 20px rgba(0,255,136,0.3);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            font-size: 1.05rem;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
+        /* ── BACK NAV ────────────────────────────────── */
+        .back-nav {
+            background: rgba(8,8,16,0.95);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            padding: 0.85rem 2rem;
+        }
+
+        .back-nav a {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+        }
+
+        .back-nav a:hover {
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+        }
+
+        /* ── CONTAINER ───────────────────────────────── */
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
         }
 
-        /* Typography */
+        /* ── SECTION HEADINGS ────────────────────────── */
         h2 {
-            font-size: 2rem;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
             color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
+            text-shadow: var(--glow-cyan);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            position: relative;
         }
 
-        /* Portfolio Grid System */
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), transparent);
+        }
+
+        .section-intro {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            color: #556;
+            margin-bottom: 2.5rem;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── CATEGORY SUBHEADINGS ────────────────────── */
+        .category-heading {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            text-shadow: var(--glow-purple);
+            margin: 3rem 0 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(123,47,255,0.3);
+        }
+
+        /* ── PORTFOLIO GRID ──────────────────────────── */
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -50,74 +124,97 @@
         }
 
         .portfolio-card {
-            background: white;
-            border-left: 4px solid var(--accent-color);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--primary-color);
             padding: 1.5rem;
-            border-radius: 0 8px 8px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease;
+            border-radius: 2px 8px 8px 2px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.25s ease, border-left-color 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .portfolio-card:hover {
             transform: translateY(-5px);
+            border-left-color: var(--secondary-color);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 15px rgba(123,47,255,0.15);
         }
 
         .portfolio-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
             margin-bottom: 0.5rem;
-            color: var(--text-color);
         }
 
         .portfolio-card .tech-stack {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 1rem;
-            font-style: italic;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.85rem;
+            letter-spacing: 0.04em;
+        }
+
+        .portfolio-card p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            flex-grow: 1;
+            margin-bottom: 0.5rem;
         }
 
         .github-link {
             display: inline-block;
             margin-top: 1rem;
             text-decoration: none;
-            color: white;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            color: var(--bg-color);
             background: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background 0.3s;
+            padding: 0.45rem 1rem;
+            border-radius: 3px;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 8px rgba(0,212,255,0.3);
+            align-self: flex-start;
         }
 
         .github-link:hover {
-            background: var(--accent-color);
+            background: var(--secondary-color);
+            box-shadow: var(--glow-purple);
+            transform: translateY(-2px);
         }
 
-        /* Simple Back Button Style */
-        .back-nav {
-            margin-bottom: 2rem;
-        }
-        
-        .back-nav a {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .back-nav a:hover {
-            color: var(--accent-color);
+        /* ── FOOTER ──────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(0,212,255,0.2);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: #555;
+            letter-spacing: 0.08em;
+            margin-top: 3rem;
         }
     </style>
 </head>
 <body>
 
+    <div class="back-nav">
+        <a href="https://matthewpenner.com/">&larr; Back to Main Profile</a>
+    </div>
+
     <div class="container">
-        
-        <div class="back-nav">
-            <a href="https://matthewpenner.com/">← Back to Main Profile</a>
-        </div>
 
         <section id="portfolio">
-            <h2>Portfolio</h2>
-            <p style="margin-bottom: 2rem;">A selection of projects from my GitHub repository demonstrating systems programming, data structures, and application development.</p>
+            <h2 style="margin-top: 1.5rem;">Portfolio</h2>
+            <p class="section-intro">// A selection of projects demonstrating systems programming, data structures, and application development.</p>
 
-            <h3 style="margin: 3rem 0 1rem 0; color: #555; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Full-Stack & Mobile Development</h3>
+            <p class="category-heading">Full-Stack &amp; Mobile Development</p>
             <div class="portfolio-grid">
 
                 <div class="portfolio-card">
@@ -126,28 +223,28 @@
                     <p>A full-stack, real-time communication platform featuring secure JWT authentication, one-on-one messaging, and group chats. Engineered with a React frontend, a Node.js/Express backend, and WebSockets for live data synchronization.</p>
                     <a href="https://github.com/mtepenner/zapchirp" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>AI-Powered Ticketing System</h3>
                     <div class="tech-stack">Python / Next.js / FastAPI</div>
                     <p>A full-stack, Kanban-style issue tracking application featuring an AI parser for intelligent ticket processing. Built with a responsive Next.js frontend and a robust Python FastAPI backend.</p>
                     <a href="https://github.com/mtepenner/ticketing-system" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Brevity Sharing Platform</h3>
                     <div class="tech-stack">Go / React / Docker</div>
                     <p>A short-form social sharing platform utilizing a high-performance Go (Golang) backend API and a React frontend. Includes infrastructure as code using Terraform and Dockerized deployment.</p>
                     <a href="https://github.com/mtepenner/brevity-sharing" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>3D Grain Silo Topography Visualizer</h3>
                     <div class="tech-stack">JavaScript / React / Node.js</div>
                     <p>A full-stack visualization tool designed to render the 3D topography of grain silos. Utilizes a Node.js backend for data processing and a React frontend with custom canvas rendering.</p>
                     <a href="https://github.com/mtepenner/3D-grain-silo-topography-visualizer" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Stargazer</h3>
                     <div class="tech-stack">Kotlin / Android SDK</div>
@@ -163,7 +260,7 @@
                 </div>
 
                 <div class="portfolio-card">
-                    <h3>Predictive Stockout & Delivery Optimizer</h3>
+                    <h3>Predictive Stockout &amp; Delivery Optimizer</h3>
                     <div class="tech-stack">Python / React</div>
                     <p>Developed an inventory forecasting and dispatch routing application. Integrates a Python backend for predictive modeling and route optimization with an interactive React dashboard for inventory and dispatch management.</p>
                     <a href="https://github.com/mtepenner/predictive-stockout-delivery-optimizer" target="_blank" class="github-link">View Repository</a>
@@ -184,8 +281,8 @@
                 </div>
 
             </div>
-            
-            <h3 style="margin: 2rem 0 1rem 0; color: #555; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Systems Programming & Architecture</h3>
+
+            <p class="category-heading">Systems Programming &amp; Architecture</p>
             <div class="portfolio-grid">
                 <div class="portfolio-card">
                     <h3>Client-Server Communication</h3>
@@ -193,14 +290,14 @@
                     <p>Developed a robust client-server architecture demonstrating low-level socket programming and networked data transmission.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS333/client-server" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Stat and WC Utilities</h3>
                     <div class="tech-stack">C</div>
                     <p>Recreated the functionality of standard Unix utilities `stat` and `wc`, interfacing directly with operating system file metadata and I/O streams.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS333/stat-and-wc" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Thread Encryption</h3>
                     <div class="tech-stack">C / pthreads</div>
@@ -214,7 +311,7 @@
                     <p>Built an Air Traffic Control (ATC) simulator applying Rust's strict memory safety rules, concurrency models, and ownership paradigms.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS423/atc-simulator" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Rule 110 Cellular Automaton</h3>
                     <div class="tech-stack">Rust</div>
@@ -223,7 +320,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 3rem 0 1rem 0; color: #555; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Compilers, Interpreters & Applications</h3>
+            <p class="category-heading">Compilers, Interpreters &amp; Applications</p>
             <div class="portfolio-grid">
                 <div class="portfolio-card">
                     <h3>ES Interpreter</h3>
@@ -231,28 +328,28 @@
                     <p>Constructed an interpreter for a custom expression syntax to evaluate statements and manage variable environments dynamically.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/es-interpreter" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>ImpLang Interpreter</h3>
                     <div class="tech-stack">Python</div>
                     <p>Developed an interpreter for "ImpLang", an imperative toy language, parsing control flows, loops, and mathematical logic.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/implang" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Lark Parser</h3>
                     <div class="tech-stack">Python</div>
                     <p>Utilized the Lark parsing toolkit to build grammar rules, tokenizers, and Abstract Syntax Trees (AST) for structured text evaluation.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/lark-parser" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>ToyLang Interpreter</h3>
                     <div class="tech-stack">Python</div>
                     <p>Built a comprehensive interpreter for "ToyLang", evaluating custom scripts from source code down to execution.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS358/toylang" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>CS410P Typescript Project</h3>
                     <div class="tech-stack">TypeScript</div>
@@ -261,7 +358,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 3rem 0 1rem 0; color: #555; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Data Structures & Algorithms</h3>
+            <p class="category-heading">Data Structures &amp; Algorithms</p>
             <div class="portfolio-grid">
                 <div class="portfolio-card">
                     <h3>Binary Search Trees</h3>
@@ -269,42 +366,42 @@
                     <p>Implemented a Binary Search Tree (BST) to manage and navigate hierarchical data with efficient insertion, deletion, and retrieval operations.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/binary-search-trees" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Graphs</h3>
                     <div class="tech-stack">C++</div>
                     <p>Developed a graph data structure utilizing adjacency lists for modeling networks, implementing traversal and pathfinding algorithms.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/graphs" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Hash Tables</h3>
                     <div class="tech-stack">C++</div>
                     <p>Created a custom Hash Table featuring collision resolution techniques to provide constant-time average complexity for lookups and data storage.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/hash-tables" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Stacks and Queues</h3>
                     <div class="tech-stack">C++</div>
                     <p>Built foundational stack (LIFO) and queue (FIFO) data structures from scratch to handle linear data processing and sequential tasks.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS163/stacks-and-queues" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>Hierarchy Data Structures</h3>
                     <div class="tech-stack">C++</div>
                     <p>Designed advanced hierarchical data models utilizing object-oriented programming principles like inheritance and polymorphism.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS302/hierarchies" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
-                    <h3>Templates & Doubly Linked Lists</h3>
+                    <h3>Templates &amp; Doubly Linked Lists</h3>
                     <div class="tech-stack">C++</div>
                     <p>Utilized C++ templates to create generic, reusable Doubly Linked List (DLL) structures capable of handling multiple data types.</p>
                     <a href="https://github.com/mtepenner/undergraduate-cs-portfolio/tree/main/CS302/templates" target="_blank" class="github-link">View Repository</a>
                 </div>
-                
+
                 <div class="portfolio-card">
                     <h3>2-3 Trees</h3>
                     <div class="tech-stack">C++</div>
@@ -314,5 +411,9 @@
             </div>
         </section>
     </div>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner &mdash; All Rights Reserved</p>
+    </footer>
 </body>
 </html>
