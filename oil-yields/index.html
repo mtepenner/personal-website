@@ -3,94 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oil Yield Calculator</title>
+    <title>Matthew Penner | Oil Yield Calculator</title>
+    <link rel="icon" type="image/jpeg" href="/professionalphoto.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: system-ui, -apple-system, sans-serif; 
-            max-width: 500px; 
-            margin: 2rem auto; 
-            padding: 1.5rem; 
-            background-color: #f9fafb;
-            color: #333;
+        :root {
+            --bg-color: #080810;
+            --bg-secondary: #0d0d1a;
+            --card-bg: #0f0f20;
+            --card-border: #1a1a35;
+            --text-color: #c8d6e5;
+            --text-bright: #ffffff;
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2fff;
+            --green-neon: #00ff88;
+            --glow-cyan: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4);
+            --glow-purple: 0 0 10px #7b2fff, 0 0 20px rgba(123,47,255,0.4);
+            --glow-green: 0 0 10px #00ff88, 0 0 20px rgba(0,255,136,0.3);
         }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            font-size: 1.05rem;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── BACK NAV ────────────────────────────────── */
+        .back-nav {
+            background: rgba(8,8,16,0.95);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            padding: 0.85rem 2rem;
+        }
+
+        .back-nav a {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+        }
+
+        .back-nav a:hover {
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+        }
+
+        /* ── MAIN WRAPPER ────────────────────────────── */
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 1.5rem;
+        }
+
+        /* ── CALCULATOR CARD ─────────────────────────── */
         .calculator-container {
-            background: white;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--primary-color);
+            border-radius: 2px 8px 8px 2px;
+            max-width: 500px;
+            width: 100%;
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 30px rgba(0,212,255,0.02);
         }
-        h2 { margin-top: 0; color: #111; }
-        .form-group { margin-bottom: 1.2rem; }
-        label { 
-            display: block; 
-            margin-bottom: 0.5rem; 
-            font-weight: 600; 
+
+        h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), transparent);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            letter-spacing: 0.04em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            background: rgba(0,212,255,0.04);
+            border: 1px solid rgba(0,212,255,0.25);
+            border-radius: 3px;
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
             font-size: 0.9rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        input, select { 
-            width: 100%; 
-            padding: 0.75rem; 
-            border: 1px solid #ccc; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-            font-size: 1rem;
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0,212,255,0.1);
         }
-        .result-card { 
-            margin-top: 2rem; 
-            padding: 1.5rem; 
-            background: #eef2ff; 
-            border: 1px solid #c7d2fe;
-            border-radius: 8px; 
-            text-align: center; 
+
+        select option {
+            background: var(--card-bg);
+            color: var(--text-color);
         }
-        .result-number { 
-            font-size: 2.5rem; 
-            font-weight: bold; 
-            color: #4f46e5; 
-            margin: 0.5rem 0; 
+
+        /* ── RESULT CARD ─────────────────────────────── */
+        .result-card {
+            margin-top: 1.75rem;
+            padding: 1.5rem;
+            background: rgba(0,212,255,0.04);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 4px;
+            text-align: center;
         }
-        .extraction-note { 
-            font-size: 0.9rem; 
-            color: #4b5563; 
-            line-height: 1.4;
+
+        .result-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+        }
+
+        .result-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+            margin: 0.4rem 0;
+        }
+
+        .extraction-note {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin-top: 0.5rem;
+        }
+
+        /* ── FOOTER ──────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(0,212,255,0.2);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.82rem;
+            color: #555;
+            letter-spacing: 0.08em;
         }
     </style>
 </head>
 <body>
 
-    <div class="calculator-container">
-        <h2>Personal Oil Yield Calculator</h2>
-        
-        <div class="form-group">
-            <label for="volume">Target Volume</label>
-            <input type="number" id="volume" value="1" min="0.1" step="0.1">
-        </div>
-        
-        <div class="form-group">
-            <label for="unit">Unit</label>
-            <select id="unit">
-                <option value="liters">Liters</option>
-                <option value="gallons">Gallons</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="plant">Plant Type</label>
-            <select id="plant">
-                <option value="olive">Olive Tree</option>
-                <option value="sunflower">Sunflower</option>
-                <option value="peanut">Peanut</option>
-                <option value="canola">Rapeseed / Canola</option>
-                <option value="lavender">Lavender (Essential Oil)</option>
-            </select>
-        </div>
+    <div class="back-nav">
+        <a href="https://matthewpenner.com/">&larr; Back to Main Profile</a>
+    </div>
 
-        <div class="result-card">
-            <div style="font-weight: 600; color: #374151;">You will need approximately:</div>
-            <div class="result-number" id="result-text">...</div>
-            <div class="extraction-note" id="note-text">...</div>
+    <div class="page-wrapper">
+        <div class="calculator-container">
+            <h2>Personal Oil Yield Calculator</h2>
+            
+            <div class="form-group">
+                <label for="volume">Target Volume</label>
+                <input type="number" id="volume" value="1" min="0.1" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label for="unit">Unit</label>
+                <select id="unit">
+                    <option value="liters">Liters</option>
+                    <option value="gallons">Gallons</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="plant">Plant Type</label>
+                <select id="plant">
+                    <option value="olive">Olive Tree</option>
+                    <option value="sunflower">Sunflower</option>
+                    <option value="peanut">Peanut</option>
+                    <option value="canola">Rapeseed / Canola</option>
+                    <option value="lavender">Lavender (Essential Oil)</option>
+                </select>
+            </div>
+
+            <div class="result-card">
+                <div class="result-label">You will need approximately:</div>
+                <div class="result-number" id="result-text">...</div>
+                <div class="extraction-note" id="note-text">...</div>
+            </div>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner. All Rights Reserved.</p>
+    </footer>
 
     <script>
         // Data: Average yields in Liters per single plant/tree
