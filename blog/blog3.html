@@ -4,67 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Infinite Potential of Wind Energy | Matthew Penner</title>
+    <link rel="icon" type="image/jpeg" href="/professionalphoto.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --primary-color: #0056b3;
-            --accent-color: #007bff;
-            --code-bg: #282c34;
-            --code-text: #abb2bf;
+            --bg-color: #080810;
+            --bg-secondary: #0d0d1a;
+            --card-bg: #0f0f20;
+            --card-border: #1a1a35;
+            --text-color: #c8d6e5;
+            --text-bright: #ffffff;
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2fff;
+            --accent-color: #ff2d78;
+            --green-neon: #00ff88;
+            --glow-cyan: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4);
+            --glow-purple: 0 0 10px #7b2fff, 0 0 20px rgba(123,47,255,0.4);
+            --glow-green: 0 0 10px #00ff88, 0 0 20px rgba(0,255,136,0.3);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        nav { background: #333; position: sticky; top: 0; z-index: 1000; padding: 1rem; text-align: center; }
-        nav a { color: white; text-decoration: none; font-weight: bold; margin: 0 1rem; transition: color 0.3s ease; }
-        nav a:hover { color: var(--accent-color); }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            font-size: 1.05rem;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        nav {
+            background: rgba(8,8,16,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,212,255,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.85rem 2rem;
+            text-align: center;
+        }
+
+        nav a {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            margin: 0 1rem;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+        }
 
         .article-container {
             max-width: 800px;
-            margin: 4rem auto;
+            margin: 3rem auto;
             padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 2px 8px 8px 2px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5), 0 0 20px rgba(0,212,255,0.05);
         }
 
-        .article-header { border-bottom: 2px solid #e2e8f0; padding-bottom: 2rem; margin-bottom: 2rem; text-align: center; }
-        .article-header h1 { color: var(--primary-color); font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2; }
-        .article-meta { color: #666; font-size: 0.95rem; font-weight: bold; }
+        .article-header {
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
 
-        .article-body h2 { color: var(--primary-color); margin: 2rem 0 1rem 0; font-size: 1.8rem; }
-        .article-body h3 { color: #444; margin: 1.5rem 0 0.5rem 0; font-size: 1.4rem; }
-        .article-body p { margin-bottom: 1.5rem; font-size: 1.1rem; }
-        
-        .article-body ul, .article-body ol { margin-bottom: 1.5rem; padding-left: 2rem; font-size: 1.1rem; }
+        .article-header h1 {
+            font-family: 'Orbitron', monospace;
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            line-height: 1.25;
+            letter-spacing: 0.04em;
+        }
+
+        .article-meta {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+        }
+
+        .article-body h2 {
+            font-family: 'Orbitron', monospace;
+            color: var(--primary-color);
+            text-shadow: var(--glow-cyan);
+            margin: 2rem 0 1rem 0;
+            font-size: 1.3rem;
+            letter-spacing: 0.05em;
+        }
+
+        .article-body h3 {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--green-neon);
+            margin: 1.5rem 0 0.5rem 0;
+            font-size: 1.1rem;
+            letter-spacing: 0.04em;
+        }
+
+        .article-body p { margin-bottom: 1.5rem; font-size: 1.05rem; }
+
+        .article-body ul, .article-body ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            font-size: 1.05rem;
+        }
+
         .article-body li { margin-bottom: 0.5rem; }
+
+        .article-body li::marker { color: var(--primary-color); }
+
+        .article-body strong { color: var(--text-bright); }
+
+        .article-body em { color: var(--secondary-color); font-style: italic; }
 
         /* Code Block Styling */
         pre {
-            background: var(--code-bg);
-            color: var(--code-text);
+            background: #0a0a18;
+            border: 1px solid rgba(0,212,255,0.2);
+            border-left: 3px solid var(--primary-color);
+            color: #abb2bf;
             padding: 1.5rem;
-            border-radius: 6px;
+            border-radius: 4px;
             overflow-x: auto;
             margin-bottom: 1.5rem;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.95rem;
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(0,212,255,0.05);
         }
-        
-        code {
-            background: #e2e8f0;
-            color: #d63384;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.95em;
-        }
-        
-        pre code { background: transparent; color: inherit; padding: 0; }
 
-        footer { text-align: center; padding: 2rem; background: #333; color: white; margin-top: 4rem; }
+        code {
+            background: rgba(0,212,255,0.08);
+            color: var(--green-neon);
+            padding: 0.2rem 0.45rem;
+            border-radius: 3px;
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+            border: 1px solid rgba(0,212,255,0.2);
+        }
+
+        pre code { background: transparent; color: inherit; padding: 0; border: none; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(0,212,255,0.2);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: #555;
+            letter-spacing: 0.08em;
+            margin-top: 3rem;
+        }
     </style>
 </head>
 <body>
