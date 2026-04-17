@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Paradigm Shift: Vibe Coding in Aerospace | Matthew Penner</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #0056b3;
+            --accent-color: #007bff;
+            --code-bg: #282c34;
+            --code-text: #abb2bf;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.8; }
+
+        nav { background: #333; position: sticky; top: 0; z-index: 1000; padding: 1rem; text-align: center; }
+        nav a { color: white; text-decoration: none; font-weight: bold; margin: 0 1rem; transition: color 0.3s ease; }
+        nav a:hover { color: var(--accent-color); }
+
+        .article-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .article-header { border-bottom: 2px solid #e2e8f0; padding-bottom: 2rem; margin-bottom: 2rem; text-align: center; }
+        .article-header h1 { color: var(--primary-color); font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2; }
+        .article-meta { color: #666; font-size: 0.95rem; font-weight: bold; }
+
+        .article-body h2 { color: var(--primary-color); margin: 2rem 0 1rem 0; font-size: 1.8rem; }
+        .article-body h3 { color: #444; margin: 1.5rem 0 0.5rem 0; font-size: 1.4rem; }
+        .article-body p { margin-bottom: 1.5rem; font-size: 1.1rem; }
+        
+        .article-body ul, .article-body ol { margin-bottom: 1.5rem; padding-left: 2rem; font-size: 1.1rem; }
+        .article-body li { margin-bottom: 0.5rem; }
+
+        /* Code Block Styling */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+        
+        code {
+            background: #e2e8f0;
+            color: #d63384;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+        }
+        
+        pre code { background: transparent; color: inherit; padding: 0; }
+
+        footer { text-align: center; padding: 2rem; background: #333; color: white; margin-top: 4rem; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/blog">&larr; Back to Blog</a>
+        <a href="/">Main Portfolio</a>
+    </nav>
+
+    <main class="article-container">
+        <header class="article-header">
+            <div class="article-meta">Published on April 17, 2026 • AI & Software Engineering</div>
+            <h1>The Paradigm Shift: Vibe Coding in Aerospace and Defense</h1>
+        </header>
+
+        <div class="article-body">
+            <p><em>AI-assisted development, colloquially known as "vibe coding," is fundamentally changing how we approach software engineering. By steering large language models with natural language and high-level architectural thinking, I have been able to thoroughly explore complex areas I previously had no experience in during my university studies.</em></p>
+            
+            <h2>Expanding Horizons into High-Stakes Domains</h2>
+            <p>Traditionally, transitioning into highly specialized fields requires years of accumulating domain-specific syntax and navigating legacy codebases. However, modern AI tools act as a powerful bridge. By focusing on systems design and logic rather than syntax memorization, I have successfully deployed several practical applications specifically tailored for military, aerospace, and outer space purposes.</p>
+
+            <h3>The Evolution of the Developer's Role</h3>
+            <p>We are no longer just typists translating business logic into machine code. The modern developer acts more like a director. Instead of manually writing out every function, we prompt the LLM, evaluate its output, and refine the architecture. For example, instead of manually writing out a complex telemetry parsing script, we can define the expected behavior through higher-level orchestration:</p>
+
+<pre><code>// Pseudocode: The "Vibe Coding" Approach
+function processTelemetryData(rawInput) {
+    // LLM handles the low-level byte manipulation and regex
+    const parsedData = LLM.execute("Parse incoming aerospace telemetry stream into structured JSON", rawInput);
+    
+    // The developer focuses on the critical validation and routing logic
+    if (validatePayload(parsedData)) {
+        routeToCommandCenter(parsedData);
+    }
+}</code></pre>
+
+            <h2>Driving an Industry Shift</h2>
+            <p>I strongly believe that this field holds immense potential and is actively catalyzing a massive industry shift. We are moving away from hard-coding at a low level toward a future defined by optimizing pre-written, LLM-generated code. This transition offers several distinct advantages:</p>
+
+            <ul>
+                <li><strong>Accelerated Problem Solving:</strong> Developers spend less time debugging missing semicolons and more time solving actual engineering problems.</li>
+                <li><strong>Cross-Disciplinary Innovation:</strong> Software engineers can confidently step into advanced sectors like aerospace and defense without decades of prior specialization.</li>
+                <li><strong>Higher-Level Optimization:</strong> The focus shifts from merely making the code <em>work</em> to making the generated code highly performant, secure, and maintainable.</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+            <p>Vibe coding is not a replacement for fundamental engineering knowledge; rather, it is a force multiplier. By embracing this shift from low-level hard coding to high-level LLM optimization, we can accelerate deployment timelines and unlock practical solutions for some of the world's most demanding environments, from military defense networks to orbital satellites.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Matthew Penner. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
