@@ -128,6 +128,7 @@
             border: 1px solid var(--card-border);
             border-left: 3px solid var(--primary-color);
             padding: 1.5rem;
+            margin: 0.2rem;
             border-radius: 2px 8px 8px 2px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
             transition: transform 0.25s ease, border-left-color 0.25s ease, box-shadow 0.25s ease;
@@ -213,6 +214,82 @@
         <section id="portfolio">
             <h2 style="margin-top: 1.5rem;">Portfolio</h2>
             <p class="section-intro">// A selection of projects demonstrating systems programming, data structures, and application development.</p>
+
+            <p class="category-heading">Aerospace &amp; Autonomous Systems</p>
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <h3>CubeSat HIL Simulator</h3>
+                    <div class="tech-stack">C++ / Go / Python / React</div>
+                    <p>A comprehensive Hardware-in-the-Loop (HIL) simulator for CubeSats. Features C++ firmware for ADCS and EPS telemetry, a Go-based hardware communication bridge, and a Python simulation engine utilizing real-time orbital dynamics and clock synchronization.</p>
+                    <a href="https://github.com/mtepenner/cubesat-hil-simulator" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Satellite Ground Station</h3>
+                    <div class="tech-stack">Go / Python / React / TimescaleDB</div>
+                    <p>A fully integrated telemetry tracking suite. Utilizes Go for parsing AX.25 and CSP network protocols, a Python backend for historical data aggregation, and a React frontend to visualize live satellite orbital metrics and telemetry graphs.</p>
+                    <a href="https://github.com/mtepenner/satellite-ground-station" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Lunar Gateway Autonomy</h3>
+                    <div class="tech-stack">Go / Python / React</div>
+                    <p>An autonomous management system tailored for deep space habitats. Employs a Go edge controller for real-time power and thermal sync, paired with a Python AI decision engine to automate logistics, alongside an interactive 3D mission control UI.</p>
+                    <a href="https://github.com/mtepenner/lunar-gateway-autonomy" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Static Fire DAQ</h3>
+                    <div class="tech-stack">C++ / Go / React</div>
+                    <p>A high-speed Data Acquisition (DAQ) architecture designed for rocket engine static fires. Incorporates C++ firmware equipped with Kalman filtering and redline abort logic, streaming to a Go telemetry gateway and a live React dashboard.</p>
+                    <a href="https://github.com/mtepenner/static-fire-daq" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Space Weather Predictor</h3>
+                    <div class="tech-stack">Go / Python / SGP4</div>
+                    <p>An ingestion and simulation engine for solar activity. Uses a Go worker to poll geomagnetic and X-ray flux data, passing it to a Python physics engine that calculates orbital decay and drag forces using the SGP4 integrator and NRLMSISE-00 atmospheric models.</p>
+                    <a href="https://github.com/mtepenner/space-weather-predictor" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>UAV Flight Optimizer</h3>
+                    <div class="tech-stack">Go / Python / React / Docker</div>
+                    <p>A 3D routing engine built to calculate energy-efficient paths for UAVs. Uses Python for A* 3D pathfinding and aerodynamic energy modeling, backed by a Go environment service to handle topographical elevation and wind vector boundaries.</p>
+                    <a href="https://github.com/mtepenner/uav-flight-optimizer" target="_blank" class="github-link">View Repository</a>
+                </div>
+            </div>
+
+            <p class="category-heading">Advanced Infrastructure &amp; Edge Computing</p>
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <h3>SAR Observation Pipeline</h3>
+                    <div class="tech-stack">Python / React / PostGIS</div>
+                    <p>A geospatial processing pipeline for Synthetic Aperture Radar (SAR) data. Features Python-based ingestion, terrain correction, and speckle filtering, paired with a spatial API and a Deck.GL React frontend for vector visualization.</p>
+                    <a href="https://github.com/mtepenner/sar-observation-pipeline" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>VPP Grid Balancer</h3>
+                    <div class="tech-stack">Rust / Go / React / MQTT</div>
+                    <p>A Virtual Power Plant orchestration system. Features a Rust-based battery edge client for local telemetry simulation, a Go dispatch engine that utilizes knapsack optimization for grid frequency monitoring, and a real-time React aggregate power dashboard.</p>
+                    <a href="https://github.com/mtepenner/vpp-grid-balancer" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Tactical Mesh Chat</h3>
+                    <div class="tech-stack">C++ / Go / React Native</div>
+                    <p>A decentralized, resilient communication system. Integrates C++ firmware for Frequency-Hopping Spread Spectrum (FHSS) radio control and AES encryption, a Go mesh gateway for packet routing, and a React Native frontend for tactical mapping and secure messaging.</p>
+                    <a href="https://github.com/mtepenner/tactical-mesh-chat" target="_blank" class="github-link">View Repository</a>
+                </div>
+
+                <div class="portfolio-card">
+                    <h3>Sentry Vision Edge</h3>
+                    <div class="tech-stack">Go / Python / React / YOLO</div>
+                    <p>An edge-computing vision platform running on containerized infrastructure. Merges Python-driven YOLO detection and SORT tracking with a Go-based behavioral brain to evaluate heuristics like loitering and boundary crossing.</p>
+                    <a href="https://github.com/mtepenner/sentry-vision-edge" target="_blank" class="github-link">View Repository</a>
+                </div>
+            </div>
 
             <p class="category-heading">Full-Stack &amp; Mobile Development</p>
             <div class="portfolio-grid">
