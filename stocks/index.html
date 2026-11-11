@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A live market dashboard and watchlist for technology stocks. Market data provided by TradingView.">
+    <title>Tech Stocks | Matthew Penner</title>
+    <link rel="icon" type="image/jpeg" href="/professionalphoto.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080810;
+            --panel: rgba(15, 15, 32, 0.94);
+            --line: rgba(0, 212, 255, 0.2);
+            --cyan: #00d4ff;
+            --green: #00ff88;
+            --coral: #ff6b6b;
+            --text: #c8d6e5;
+            --muted: #8290a1;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.025) 1px, transparent 1px),
+                radial-gradient(ellipse at 18% 0%, rgba(0, 212, 255, 0.09), transparent 34rem);
+            background-size: 40px 40px, 40px 40px, auto;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+        }
+
+        a { color: inherit; }
+
+        .topbar {
+            min-height: 52px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.65rem max(1.25rem, calc((100vw - 1440px) / 2));
+            background: rgba(8, 8, 16, 0.94);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .back-link, .market-state, .eyebrow, .section-kicker, .source-note, footer {
+            font-family: 'Share Tech Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .back-link {
+            color: var(--cyan);
+            text-decoration: none;
+            font-size: 0.82rem;
+        }
+
+        .back-link:hover { color: var(--green); }
+
+        .market-state {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: var(--muted);
+            font-size: 0.72rem;
+        }
+
+        .state-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+        }
+
+        main {
+            width: min(1440px, 100%);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .eyebrow, .section-kicker {
+            margin: 0 0 0.45rem;
+            color: var(--green);
+            font-size: 0.72rem;
+        }
+
+        h1, h2, h3, p { margin-top: 0; }
+
+        h1 {
+            margin-bottom: 0.25rem;
+            color: #f5fbff;
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.65rem, 3vw, 2.45rem);
+            line-height: 1.2;
+        }
+
+        .heading-copy { max-width: 700px; }
+
+        .heading-copy > p:last-child {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .heading-mark {
+            padding: 0.7rem 0.9rem;
+            border-left: 2px solid var(--coral);
+            color: #ffb1a8;
+            background: rgba(255, 107, 107, 0.07);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .ticker-wrap {
+            overflow: hidden;
+            min-height: 46px;
+            margin-bottom: 1.25rem;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: rgba(12, 16, 25, 0.88);
+        }
+
+        .tradingview-widget-container { width: 100%; }
+        .ticker-wrap .tradingview-widget-container { min-height: 44px; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.75fr) minmax(300px, 0.85fr);
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        .panel {
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            background: var(--panel);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            min-height: 62px;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .panel-heading h2 {
+            margin: 0;
+            color: #edf8ff;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.04em;
+        }
+
+        .source-note {
+            color: var(--muted);
+            font-size: 0.64rem;
+            text-align: right;
+        }
+
+        .market-widget { min-height: 510px; }
+        .market-widget .tradingview-widget-container { min-height: 510px; }
+
+        .watchlist-controls {
+            display: grid;
+            gap: 0.75rem;
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .search-label {
+            display: block;
+            margin-bottom: 0.35rem;
+            color: var(--muted);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .search-input {
+            width: 100%;
+            min-height: 38px;
+            padding: 0.55rem 0.7rem;
+            border: 1px solid rgba(0, 212, 255, 0.28);
+            border-radius: 3px;
+            outline: none;
+            background: rgba(0, 212, 255, 0.04);
+            color: #fff;
+            font: 0.9rem 'Share Tech Mono', monospace;
+        }
+
+        .search-input:focus { border-color: var(--cyan); }
+        .search-input::placeholder { color: #647284; }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .filter-button {
+            min-height: 32px;
+            padding: 0.35rem 0.6rem;
+            border: 1px solid rgba(130, 144, 161, 0.3);
+            border-radius: 3px;
+            background: transparent;
+            color: var(--muted);
+            font: 0.7rem 'Share Tech Mono', monospace;
+            cursor: pointer;
+        }
+
+        .filter-button:hover, .filter-button[aria-pressed="true"] {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            background: rgba(0, 212, 255, 0.07);
+        }
+
+        .stock-list { list-style: none; margin: 0; padding: 0; }
+
+        .stock-item { border-bottom: 1px solid rgba(0, 212, 255, 0.1); }
+        .stock-item:last-child { border-bottom: 0; }
+
+        .stock-link {
+            display: grid;
+            grid-template-columns: 66px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 0.75rem;
+            min-height: 68px;
+            padding: 0.7rem 1rem;
+            text-decoration: none;
+            transition: background 160ms ease;
+        }
+
+        .stock-link:hover { background: rgba(0, 212, 255, 0.06); }
+
+        .stock-symbol {
+            color: var(--cyan);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.83rem;
+            font-weight: 700;
+        }
+
+        .stock-name { min-width: 0; }
+        .stock-name strong { display: block; color: #eef4fa; font-size: 0.96rem; }
+        .stock-name span { display: block; color: var(--muted); font-size: 0.78rem; }
+
+        .stock-sector {
+            padding: 0.25rem 0.4rem;
+            border: 1px solid rgba(0, 255, 136, 0.22);
+            border-radius: 2px;
+            color: #8fe6bd;
+            font: 0.61rem 'Share Tech Mono', monospace;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            display: none;
+            padding: 1.5rem 1rem;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .risk-note {
+            margin: 1rem 0 0;
+            padding-left: 0.8rem;
+            border-left: 2px solid var(--coral);
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        footer {
+            padding: 1.2rem 1.5rem;
+            border-top: 1px solid var(--line);
+            color: #697687;
+            font-size: 0.68rem;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid { grid-template-columns: minmax(0, 1fr); }
+            .market-widget, .market-widget .tradingview-widget-container { min-height: 470px; }
+        }
+
+        @media (max-width: 600px) {
+            main { padding: 1.5rem 0.85rem 2rem; }
+            .topbar { padding-right: 0.85rem; padding-left: 0.85rem; }
+            .page-heading { align-items: start; flex-direction: column; gap: 0.8rem; }
+            .heading-mark { white-space: normal; }
+            .panel-heading { align-items: start; flex-direction: column; gap: 0.3rem; }
+            .source-note { text-align: left; }
+            .market-widget, .market-widget .tradingview-widget-container { min-height: 490px; }
+            .stock-link { grid-template-columns: 58px minmax(0, 1fr) auto; gap: 0.5rem; padding-right: 0.7rem; padding-left: 0.7rem; }
+            .stock-sector { font-size: 0.56rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="topbar" aria-label="Main navigation">
+        <a class="back-link" href="/">&larr; Matthew Penner</a>
+        <span class="market-state"><span class="state-dot" aria-hidden="true"></span>Market data feed</span>
+    </nav>
+
+    <main>
+        <section class="page-heading" aria-labelledby="page-title">
+            <div class="heading-copy">
+                <p class="eyebrow">Market watch / Technology</p>
+                <h1 id="page-title">Hot Tech Stocks</h1>
+                <p>Track the names driving AI, cloud, and chip infrastructure.</p>
+            </div>
+            <div class="heading-mark">Live quotes &middot; market data by TradingView</div>
+        </section>
+
+        <section class="ticker-wrap" aria-label="Technology stock ticker">
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                {
+                    "symbols": [
+                        {"proName": "NASDAQ:NVDA", "title": "NVIDIA"},
+                        {"proName": "NASDAQ:MSFT", "title": "Microsoft"},
+                        {"proName": "NASDAQ:AMD", "title": "AMD"},
+                        {"proName": "NASDAQ:GOOGL", "title": "Alphabet"},
+                        {"proName": "NASDAQ:AVGO", "title": "Broadcom"},
+                        {"proName": "NASDAQ:META", "title": "Meta"}
+                    ],
+                    "showSymbolLogo": true,
+                    "isTransparent": true,
+                    "displayMode": "adaptive",
+                    "colorTheme": "dark",
+                    "locale": "en"
+                }
+                </script>
+            </div>
+        </section>
+
+        <div class="dashboard-grid">
+            <section class="panel" aria-labelledby="market-title">
+                <div class="panel-heading">
+                    <h2 id="market-title">Technology Market Overview</h2>
+                    <span class="source-note">Quotes may be delayed</span>
+                </div>
+                <div class="market-widget">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark",
+                            "dateRange": "12M",
+                            "showChart": true,
+                            "locale": "en",
+                            "width": "100%",
+                            "height": "510",
+                            "isTransparent": true,
+                            "showSymbolLogo": true,
+                            "showFloatingTooltip": false,
+                            "plotLineColorGrowing": "rgba(0, 255, 136, 1)",
+                            "plotLineColorFalling": "rgba(255, 107, 107, 1)",
+                            "gridLineColor": "rgba(130, 144, 161, 0.12)",
+                            "scaleFontColor": "#9aaabd",
+                            "belowLineFillColorGrowing": "rgba(0, 255, 136, 0.08)",
+                            "belowLineFillColorFalling": "rgba(255, 107, 107, 0.08)",
+                            "symbolActiveColor": "rgba(0, 212, 255, 0.12)",
+                            "tabs": [
+                                {"title": "AI & Chips", "symbols": [
+                                    {"s": "NASDAQ:NVDA", "d": "NVIDIA"},
+                                    {"s": "NASDAQ:AMD", "d": "AMD"},
+                                    {"s": "NASDAQ:AVGO", "d": "Broadcom"},
+                                    {"s": "NYSE:TSM", "d": "TSMC"}
+                                ]},
+                                {"title": "Cloud & Software", "symbols": [
+                                    {"s": "NASDAQ:MSFT", "d": "Microsoft"},
+                                    {"s": "NASDAQ:AMZN", "d": "Amazon"},
+                                    {"s": "NASDAQ:GOOGL", "d": "Alphabet"},
+                                    {"s": "NYSE:ORCL", "d": "Oracle"},
+                                    {"s": "NASDAQ:PLTR", "d": "Palantir"}
+                                ]},
+                                {"title": "Platforms", "symbols": [
+                                    {"s": "NASDAQ:AAPL", "d": "Apple"},
+                                    {"s": "NASDAQ:META", "d": "Meta Platforms"},
+                                    {"s": "NASDAQ:TSLA", "d": "Tesla"}
+                                ]}
+                            ]
+                        }
+                        </script>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="panel" aria-labelledby="watchlist-title">
+                <div class="panel-heading">
+                    <h2 id="watchlist-title">The Watchlist</h2>
+                    <span class="source-note" id="result-count" aria-live="polite">10 tracked</span>
+                </div>
+                <div class="watchlist-controls">
+                    <div>
+                        <label class="search-label" for="stock-search">Find a company or ticker</label>
+                        <input class="search-input" id="stock-search" type="search" placeholder="Try NVDA or cloud..." autocomplete="off">
+                    </div>
+                    <div class="filter-row" role="group" aria-label="Filter watchlist by sector">
+                        <button class="filter-button" type="button" data-filter="all" aria-pressed="true">All</button>
+                        <button class="filter-button" type="button" data-filter="chips" aria-pressed="false">Chips</button>
+                        <button class="filter-button" type="button" data-filter="cloud" aria-pressed="false">Cloud</button>
+                        <button class="filter-button" type="button" data-filter="platforms" aria-pressed="false">Platforms</button>
+                    </div>
+                </div>
+                <ul class="stock-list" id="stock-list">
+                    <li class="stock-item" data-sector="chips" data-search="nvidia nvda ai accelerators semiconductors">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-NVDA/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">NVDA</span><span class="stock-name"><strong>NVIDIA</strong><span>AI accelerators</span></span><span class="stock-sector">Chips</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="chips" data-search="advanced micro devices amd processors semiconductors">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-AMD/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">AMD</span><span class="stock-name"><strong>Advanced Micro Devices</strong><span>Compute &amp; accelerators</span></span><span class="stock-sector">Chips</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="chips" data-search="broadcom avgo networking custom silicon">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-AVGO/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">AVGO</span><span class="stock-name"><strong>Broadcom</strong><span>Networking &amp; custom silicon</span></span><span class="stock-sector">Chips</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="chips" data-search="tsmc tsm foundry fabrication">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NYSE-TSM/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">TSM</span><span class="stock-name"><strong>TSMC</strong><span>Semiconductor foundry</span></span><span class="stock-sector">Chips</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="cloud" data-search="microsoft msft cloud software ai">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-MSFT/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">MSFT</span><span class="stock-name"><strong>Microsoft</strong><span>Cloud &amp; software</span></span><span class="stock-sector">Cloud</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="cloud" data-search="amazon amzn cloud commerce">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-AMZN/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">AMZN</span><span class="stock-name"><strong>Amazon</strong><span>Cloud &amp; commerce</span></span><span class="stock-sector">Cloud</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="cloud" data-search="alphabet google googl cloud ai">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-GOOGL/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">GOOGL</span><span class="stock-name"><strong>Alphabet</strong><span>Search, cloud &amp; AI</span></span><span class="stock-sector">Cloud</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="cloud" data-search="oracle orcl cloud database">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NYSE-ORCL/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">ORCL</span><span class="stock-name"><strong>Oracle</strong><span>Cloud infrastructure</span></span><span class="stock-sector">Cloud</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="platforms" data-search="apple aapl devices services">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">AAPL</span><span class="stock-name"><strong>Apple</strong><span>Devices &amp; services</span></span><span class="stock-sector">Platforms</span>
+                        </a>
+                    </li>
+                    <li class="stock-item" data-sector="platforms" data-search="meta platforms meta social ai">
+                        <a class="stock-link" href="https://www.tradingview.com/symbols/NASDAQ-META/" target="_blank" rel="noopener noreferrer">
+                            <span class="stock-symbol">META</span><span class="stock-name"><strong>Meta Platforms</strong><span>Social &amp; AI</span></span><span class="stock-sector">Platforms</span>
+                        </a>
+                    </li>
+                </ul>
+                <p class="empty-state" id="empty-state">No matching stocks. Try another search.</p>
+            </aside>
+        </div>
+
+        <p class="risk-note">This watchlist is for market research, not investment advice. Stock prices can move quickly; do your own research before making financial decisions.</p>
+    </main>
+
+    <footer>Market data and charts provided by TradingView. Quotes may be delayed.</footer>
+
+    <script>
+        const searchInput = document.getElementById('stock-search');
+        const stockItems = Array.from(document.querySelectorAll('.stock-item'));
+        const filterButtons = Array.from(document.querySelectorAll('.filter-button'));
+        const resultCount = document.getElementById('result-count');
+        const emptyState = document.getElementById('empty-state');
+        let activeFilter = 'all';
+
+        function updateWatchlist() {
+            const query = searchInput.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            stockItems.forEach((item) => {
+                const matchesFilter = activeFilter === 'all' || item.dataset.sector === activeFilter;
+                const matchesSearch = item.dataset.search.includes(query);
+                const isVisible = matchesFilter && matchesSearch;
+                item.hidden = !isVisible;
+                if (isVisible) visibleCount += 1;
+            });
+
+            resultCount.textContent = `${visibleCount} tracked`;
+            emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        searchInput.addEventListener('input', updateWatchlist);
+        filterButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                activeFilter = button.dataset.filter;
+                filterButtons.forEach((filterButton) => {
+                    filterButton.setAttribute('aria-pressed', String(filterButton === button));
+                });
+                updateWatchlist();
+            });
+        });
+    </script>
+</body>
+</html>
