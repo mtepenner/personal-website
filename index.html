@@ -106,10 +106,11 @@
         nav ul {
             display: flex;
             justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
             list-style: none;
             padding: 0.75rem 1rem;
-            gap: 0.25rem;
+            gap: 0.5rem;
         }
 
         nav ul li {
@@ -188,6 +189,71 @@
         .dropdown-content a:hover::before { opacity: 1; }
 
         .dropdown:hover .dropdown-content { display: block; }
+
+        /* ── SEARCH BAR ──────────────────────────────── */
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            background: rgba(10,10,25,0.6);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 32px;
+        }
+
+        .search-form:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow-cyan);
+            background: rgba(10,10,25,0.9);
+        }
+
+        .search-form input {
+            background: transparent;
+            border: none;
+            color: var(--text-bright);
+            padding: 0 0.6rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            outline: none;
+            width: 130px;
+            transition: width 0.3s ease;
+        }
+
+        .search-form input::placeholder {
+            color: rgba(200, 214, 229, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .search-form input:focus {
+            width: 180px;
+        }
+
+        .search-form button {
+            background: rgba(0,212,255,0.1);
+            border: none;
+            border-left: 1px solid rgba(0,212,255,0.3);
+            color: var(--primary-color);
+            padding: 0 0.6rem;
+            height: 100%;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-form button:hover {
+            background: var(--primary-color);
+            color: var(--bg-color);
+        }
 
         /* ── CONTAINER ───────────────────────────────── */
         .container {
@@ -423,6 +489,9 @@
             }
             header h1 { font-size: 2rem; }
             nav ul li a { font-size: 0.62rem; padding: 0.4rem 0.6rem; }
+            
+            .search-form input { width: 100px; }
+            .search-form input:focus { width: 140px; }
         }
     </style>
 </head>
@@ -448,6 +517,12 @@
                     <a href="/oil-yields">Oil Conversions</a>
                     <a href="/dream-car">Car Designer</a>
                 </div>
+            </li>
+            <li class="search-container">
+                <form action="https://www.google.com/search" method="get" target="_blank" class="search-form">
+                    <input type="text" name="q" placeholder="Search..." required>
+                    <button type="submit" title="Google Search">&#128269;</button>
+                </form>
             </li>
             <li><a href="/blog">Blog</a></li>
             <li><a href="assets/Matthew_Penner_Resume.pdf" download>Resume</a></li>
