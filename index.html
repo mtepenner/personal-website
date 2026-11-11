@@ -101,6 +101,9 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         nav ul {
@@ -192,6 +195,8 @@
 
         /* ── SEARCH BAR ──────────────────────────────── */
         .search-container {
+            position: absolute;
+            right: 1.5rem;
             display: flex;
             align-items: center;
         }
@@ -483,6 +488,21 @@
         }
 
         /* ── RESPONSIVE ──────────────────────────────── */
+        @media (max-width: 980px) {
+            nav {
+                flex-direction: column;
+                padding-top: 0.5rem;
+            }
+            .search-container {
+                position: relative;
+                right: auto;
+                margin-bottom: 0.75rem;
+            }
+            nav ul {
+                padding: 0.5rem 1rem;
+            }
+        }
+        
         @media (max-width: 768px) {
             .about-grid {
                 grid-template-columns: 1fr;
@@ -518,16 +538,16 @@
                     <a href="/dream-car">Car Designer</a>
                 </div>
             </li>
-            <li class="search-container">
-                <form action="https://www.google.com/search" method="get" target="_blank" class="search-form">
-                    <input type="text" name="q" placeholder="Search..." required>
-                    <button type="submit" title="Google Search">&#128269;</button>
-                </form>
-            </li>
             <li><a href="/blog">Blog</a></li>
             <li><a href="assets/Matthew_Penner_Resume.pdf" download>Resume</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <div class="search-container">
+            <form action="https://www.google.com/search" method="get" target="_blank" class="search-form">
+                <input type="text" name="q" placeholder="Search..." required>
+                <button type="submit" title="Google Search">&#128269;</button>
+            </form>
+        </div>
     </nav>
 
     <div class="container">
@@ -589,43 +609,4 @@
                 <div class="skills-container">
                     <span class="skill-tag">C / C++</span>
                     <span class="skill-tag">Python</span>
-                    <span class="skill-tag">Rust</span>
-                    <span class="skill-tag">Java</span>
-                    <span class="skill-tag">JavaScript / TypeScript</span>
-                    <span class="skill-tag">React</span>
-                    <span class="skill-tag">Node.js</span>
-                    <span class="skill-tag">SQL & MongoDB</span>
-                    <span class="skill-tag">POSIX Threads / Multi-threading</span>
-                    <span class="skill-tag">Data Structures & Algorithms</span>
-                    <span class="skill-tag">Network Programming (TCP/IP)</span>
-                    <span class="skill-tag">Linux / GDB</span>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2>Contact</h2>
-            <div class="card" style="text-align: center;">
-                <p style="margin-bottom: 0.5rem;">Ready to connect? Reach out via LinkedIn or check out my full code history on GitHub.</p>
-                <p style="margin-bottom: 1.5rem;"><span style="color: var(--primary-color); font-family: 'Share Tech Mono', monospace;">LOC:</span>Austin, TX</p>
-                <a href="https://github.com/mtepenner" target="_blank" class="contact-btn github">GitHub Profile</a>
-                <a href="https://www.linkedin.com/in/matthew-penner-39543217oo" target="_blank" class="contact-btn linkedin">LinkedIn</a>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 Matthew Penner &mdash; All Rights Reserved</p>
-    </footer>
-
-    <script>
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-    </script>
-</body>
-</html>
+                    <span class="skill-tag">Rust
